@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Área do Vendedor - Retiro 2027 | Jornada à Terra Prometida</title>
+  <title>Área do Vendedor - Pix Premiado Retiro 2027</title>
   
   <!-- Fontes Oficiais: Cormorant Garamond, DM Sans e Space Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -72,11 +72,11 @@
         </a>
         <div>
           <h1 class="font-serif text-xl font-bold text-sand-100 leading-tight">Painel do Vendedor</h1>
-          <p class="text-xs text-gold-400 font-semibold tracking-wider">Jornada à Terra Prometida • Retiro 2027</p>
+          <p class="text-xs text-gold-400 font-semibold tracking-wider">Ação Beneficente • Retiro 2027</p>
         </div>
       </div>
       <a href="/" class="text-xs bg-[#080f23] text-gold-300 border border-gold-500/30 px-3.5 py-1.5 rounded-xl hover:bg-gold-500 hover:text-slate-950 transition font-bold uppercase tracking-wider">
-        Ver Rifa
+        Ver Pix Premiado
       </a>
     </div>
   </header>
@@ -90,11 +90,11 @@
       <!-- IDENTIFICAÇÃO DO VENDEDOR -->
       <div class="mb-6 pb-6 border-b border-gold-500/20">
         <label class="block text-xs font-bold uppercase tracking-wider text-gold-400 mb-2">
-          1. Seu Nome (Vendedor da Igreja) *
+          1. Seu Nome (Vendedor / Organizador) *
         </label>
         <div class="relative">
           <i data-lucide="user" class="w-5 h-5 absolute left-3.5 top-3.5 text-sand-500"></i>
-          <input type="text" id="sellerName" placeholder="Ex: Gabriel Silva (Jovens)" 
+          <input type="text" id="sellerName" placeholder="Ex: Gabriel Silva" 
             class="w-full pl-11 pr-4 py-3 rounded-xl bg-[#080f23] border border-gold-500/30 focus:outline-none focus:ring-2 focus:ring-gold-500 text-sand-100 text-sm font-semibold placeholder:text-sand-500"
             onchange="saveSellerName()">
         </div>
@@ -131,7 +131,7 @@
       <div class="mb-6 pb-6 border-b border-gold-500/20">
         <div class="flex items-center justify-between mb-3">
           <label class="text-xs font-bold uppercase tracking-wider text-gold-400">
-            3. Escolha dos Números da Rifa *
+            3. Escolha dos Números do Pix Premiado *
           </label>
           <span class="text-xs text-slate-950 font-black bg-gradient-to-r from-gold-400 to-gold-500 px-2.5 py-0.5 rounded-lg font-mono">
             R$ <span id="unitPriceDisplay">10,00</span> / ponto
@@ -251,6 +251,34 @@
           <span class="text-sand-400 block mb-1">Números Reservados:</span>
           <div id="modalNumbersTags" class="flex flex-wrap gap-1.5">
             <!-- Tags dos números -->
+          </div>
+        </div>
+      </div>
+
+      <!-- COBRANÇA PRESENCIAL COM QR CODE -->
+      <div class="bg-[#080f23] p-4 rounded-2xl border border-gold-500/35 mb-5 text-center">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold uppercase text-gold-400 flex items-center gap-1.5">
+            <i data-lucide="qr-code" class="w-4 h-4"></i>
+            Cobrança na Hora (Presencial)
+          </span>
+          <button type="button" onclick="toggleSellerQr()" class="text-xs text-sand-300 hover:text-gold-300 underline font-medium" id="toggleQrBtnText">
+            Mostrar QR Code
+          </button>
+        </div>
+
+        <div id="sellerQrBox" class="hidden pt-3 mt-3 border-t border-gold-500/20">
+          <div class="bg-white p-3 rounded-2xl border-2 border-gold-500/50 inline-block mx-auto mb-3">
+            <img src="/static/qrcode_pix.jpg" alt="QR Code Pix" class="w-40 h-40 object-contain mx-auto">
+          </div>
+          <div class="text-xs text-sand-300 mb-2">
+            Titular: <strong class="text-sand-100" id="modalPixBeneficiary">ANDRE S GABAIA</strong>
+          </div>
+          <div class="flex flex-col sm:flex-row gap-2 justify-center">
+            <button type="button" onclick="copySellerPayload()" class="px-3 py-2 bg-[#101e35] hover:bg-[#182c4d] border border-gold-500/40 text-gold-300 text-xs font-bold rounded-lg flex items-center justify-center gap-1.5 transition">
+              <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+              <span id="btnCopySellerPayloadText">Copiar Pix Copia e Cola</span>
+            </button>
           </div>
         </div>
       </div>
@@ -500,17 +528,22 @@
 
       const formattedNums = order.numbers.map(n => String(n).padStart(4, '0')).join(', ');
       const cleanPhone = order.buyer_phone.replace(/\D/g, '');
-      const pixKey = appConfig.pix_key || "retiro2027@igreja.org";
-      const pixBeneficiary = appConfig.pix_beneficiary || "Igreja / Retiro 2027";
+      const pixKey = appConfig.pix_key || "cf6eed52-c2c5-4474-baf1-b254f5218a42";
+      const pixBeneficiary = appConfig.pix_beneficiary || "ANDRE S GABAIA";
+      const pixPayload = appConfig.pix_payload || "00020101021126580014br.gov.bcb.pix0136cf6eed52-c2c5-4474-baf1-b254f5218a425204000053039865802BR5914ANDRE S GABAIA6007BACABAL62070503***63041CEF";
+
+      document.getElementById('modalPixBeneficiary').innerText = pixBeneficiary;
 
       const buyerMsg = encodeURIComponent(
         `Olá, ${order.buyer_name}! 🙌\n\n` +
-        `Passando para confirmar que seus pontos da *Rifa do Retiro 2027 (Jornada à Terra Prometida)* foram reservados!\n\n` +
+        `Passando para confirmar que seus pontos do *Pix Premiado Beneficente - Retiro 2027* foram reservados com sucesso!\n\n` +
         `🎟️ *Seus Números:* ${formattedNums}\n` +
         `💰 *Valor Total:* R$ ${parseFloat(order.total_amount).toFixed(2).replace('.', ',')}\n\n` +
-        `🔑 *Chave Pix para Pagamento:*\n${pixKey}\n` +
-        `👤 *Titular:* ${pixBeneficiary}\n\n` +
-        `Assim que fizer o Pix, me envie o comprovante por aqui para que a liderança valide seus pontos no sistema oficial. Muito obrigado pelo seu apoio!`
+        `🔑 *Chave Pix (Aleatória):*\n${pixKey}\n\n` +
+        `📋 *Pix Copia e Cola (Cole no App do Banco):*\n${pixPayload}\n\n` +
+        `👤 *Titular:* ${pixBeneficiary}\n` +
+        `🏛️ *Cidade:* Bacabal - MA\n\n` +
+        `Assim que fizer o Pix, me envie o comprovante por aqui para validação oficial dos seus pontos no sistema. Muito obrigado pelo seu apoio!`
       );
 
       const buyerBtn = document.getElementById('btnShareBuyerWhatsApp');
@@ -518,20 +551,44 @@
 
       const leaderPhone = (appConfig.leader_whatsapp || "").replace(/\D/g, '');
       const leaderMsg = encodeURIComponent(
-        `Olá Liderança! 📋\n\n` +
-        `Acabei de registrar uma venda de pontos da rifa do Retiro 2027:\n` +
+        `Olá Organização! 📋\n\n` +
+        `Acabei de registrar uma venda de pontos do Pix Premiado (Retiro 2027):\n` +
         `• *Comprador:* ${order.buyer_name}\n` +
         `• *Vendedor:* ${order.seller_name}\n` +
         `• *Números:* ${formattedNums}\n` +
         `• *Total:* R$ ${parseFloat(order.total_amount).toFixed(2).replace('.', ',')}\n\n` +
-        `Estou encaminhando o comprovante para vocês darem baixa no painel dos líderes!`
+        `Estou encaminhando o comprovante para vocês darem baixa no sistema!`
       );
 
       const leaderBtn = document.getElementById('btnShareLeaderWhatsApp');
       leaderBtn.href = leaderPhone ? `https://wa.me/${leaderPhone}?text=${leaderMsg}` : `https://api.whatsapp.com/send?text=${leaderMsg}`;
 
+      document.getElementById('sellerQrBox').classList.add('hidden');
+      document.getElementById('toggleQrBtnText').innerText = "Mostrar QR Code";
       document.getElementById('successModal').classList.remove('hidden');
       lucide.createIcons();
+    }
+
+    function toggleSellerQr() {
+      const box = document.getElementById('sellerQrBox');
+      const btn = document.getElementById('toggleQrBtnText');
+      if (box.classList.contains('hidden')) {
+        box.classList.remove('hidden');
+        btn.innerText = "Ocultar QR Code";
+      } else {
+        box.classList.add('hidden');
+        btn.innerText = "Mostrar QR Code";
+      }
+    }
+
+    function copySellerPayload() {
+      const payload = appConfig.pix_payload || "00020101021126580014br.gov.bcb.pix0136cf6eed52-c2c5-4474-baf1-b254f5218a425204000053039865802BR5914ANDRE S GABAIA6007BACABAL62070503***63041CEF";
+      navigator.clipboard.writeText(payload).then(() => {
+        const btnText = document.getElementById('btnCopySellerPayloadText');
+        const orig = btnText.innerText;
+        btnText.innerText = "Copiado com Sucesso!";
+        setTimeout(() => { btnText.innerText = orig; }, 2500);
+      });
     }
 
     function resetSaleForm() {
@@ -540,6 +597,8 @@
       document.getElementById('buyerPhone').value = '';
       updateSelectedUI();
       renderPickerGrid();
+      document.getElementById('sellerQrBox').classList.add('hidden');
+      document.getElementById('toggleQrBtnText').innerText = "Mostrar QR Code";
       document.getElementById('successModal').classList.add('hidden');
     }
 

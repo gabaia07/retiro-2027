@@ -8,7 +8,7 @@ import io
 import csv
 import database
 
-app = FastAPI(title="Sistema de Rifa - Retiro 2027", version="1.0.0")
+app = FastAPI(title="Sistema Pix Premiado - Retiro 2027", version="1.0.0")
 
 # Inicializa banco de dados ao carregar
 database.init_db()
@@ -35,6 +35,7 @@ class ConfigUpdateRequest(BaseModel):
     pix_type: Optional[str] = None
     pix_beneficiary: Optional[str] = None
     pix_bank: Optional[str] = None
+    pix_payload: Optional[str] = None
     leader_whatsapp: Optional[str] = None
     admin_password: Optional[str] = None
     draw_date: Optional[str] = None
@@ -195,7 +196,7 @@ def export_tickets_csv(token: Optional[str] = None):
     return Response(
         content=output.getvalue().encode('utf-8-sig'),
         media_type="text/csv",
-        headers={"Content-Disposition": "attachment; filename=relatorio_rifa_retiro_2027.csv"}
+        headers={"Content-Disposition": "attachment; filename=relatorio_pix_premiado_retiro_2027.csv"}
     )
 
 # --- SERVIR ARQUIVOS ESTÁTICOS / FRONTEND ---
@@ -220,6 +221,13 @@ def serve_lideres():
 @app.get("/sorteio")
 def serve_sorteio():
     return FileResponse(os.path.join(STATIC_DIR, "sorteio.html"))
+
+@app.get("/qrcode_pix.jpg")
+def serve_qr():
+    p = os.path.join(STATIC_DIR, "qrcode_pix.jpg")
+    if not os.path.exists(p):
+        p = os.path.join(os.path.dirname(__file__), "qrcode_pix.jpg")
+    return FileResponse(p)
 
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 

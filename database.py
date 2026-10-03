@@ -55,26 +55,28 @@ def init_db():
 
     # Configurações padrão
     default_configs = {
-        "title": "Grande Rifa Beneficente",
-        "subtitle": "Em prol do Retiro Espiritual 2027",
-        "church_name": "Nossa Igreja",
+        "title": "Grande Pix Premiado Beneficente",
+        "subtitle": "Em prol do Retiro 2027",
+        "church_name": "Coordenação Retiro 2027",
         "retreat_year": "2027",
         "price_per_ticket": "10.00",
         "total_tickets": "2000",
-        "pix_key": "retiro2027@igreja.org",
-        "pix_type": "Chave Aleatória / E-mail",
-        "pix_beneficiary": "Tesouraria / Coordenação do Retiro",
-        "pix_bank": "Banco Inter / Nubank",
+        "pix_key": "cf6eed52-c2c5-4474-baf1-b254f5218a42",
+        "pix_type": "Chave Aleatória (EVP)",
+        "pix_beneficiary": "ANDRE S GABAIA",
+        "pix_bank": "Conta Pix (Bacabal/MA)",
+        "pix_payload": "00020101021126580014br.gov.bcb.pix0136cf6eed52-c2c5-4474-baf1-b254f5218a425204000053039865802BR5914ANDRE S GABAIA6007BACABAL62070503***63041CEF",
         "leader_whatsapp": "5511999999999",
         "admin_password": "lideres2027",
-        "draw_date": "19 de Dezembro de 2026",
-        "draw_location": "Culto Especial de Jovens & Família",
+        "draw_date": "Dezembro de 2026",
+        "draw_location": "Encontro Especial do Retiro",
         "prizes": json.dumps([
             {"place": "1º Prêmio", "title": "PIX de R$ 1.000,00", "desc": "Transferência de R$ 1.000,00 direto na sua conta via Pix"},
             {"place": "2º Prêmio", "title": "PIX de R$ 500,00", "desc": "Transferência de R$ 500,00 direto na sua conta via Pix"}
         ]),
-        "intro_text": "Nosso Retiro Espiritual 2027 será um momento inesquecível de comunhão, adoração e transformação de vidas! Toda a renda desta rifa será 100% revertida para subsidiar o transporte, alimentação e estadia dos nossos jovens e participantes. Ao comprar um ponto, você investe diretamente no Reino de Deus!",
-        "bible_verse": "Cada um dê conforme determinou em seu coração, não com tristeza ou por obrigação, pois Deus ama quem dá com alegria. (2 Coríntios 9:7)"
+        "intro_text": "Toda a arrecadação desta ação é 100% revertida para apoiar os participantes do nosso <strong>Retiro 2027</strong> através do <strong>Pix Premiado</strong>. Sua colaboração faz toda a diferença!",
+        "about_text": "O retiro é um encontro especial planejado para proporcionar convivência, desenvolvimento pessoal, reflexão e novas experiências. Muitos participantes que não teriam condições individuais de arcar com os custos terão a oportunidade de viver essa jornada graças a você!",
+        "bible_verse": "A verdadeira solidariedade está em estender a mão e construir pontes para que mais pessoas realizem seus sonhos."
     }
 
     for key, val in default_configs.items():
