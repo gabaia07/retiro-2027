@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel dos Líderes - Retiro 2027 | Jornada à Terra Prometida</title>
+  
+  <!-- Fontes Oficiais: Cormorant Garamond, DM Sans e Space Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['"Cormorant Garamond"', 'serif'],
+            sans: ['"DM Sans"', '-apple-system', 'sans-serif'],
+            mono: ['"Space Mono"', 'monospace'],
+          },
+          colors: {
+            bgDark: '#080f23',
+            cardDark: '#101e35',
+            gold: {
+              300: '#dfc173',
+              400: '#d4a955',
+              500: '#c99f4b',
+              600: '#bd9650',
+              700: '#88652e',
+            },
+            sand: {
+              100: '#f4ede1',
+              200: '#eee3cd',
+              300: '#e6d8bb',
+              400: '#c6b99f',
+              500: '#8f98ab',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #080f23;
+      color: #eee3cd;
+      background-image: 
+        radial-gradient(circle at 30% 0%, rgba(47, 61, 104, 0.35), transparent 45%),
+        radial-gradient(circle at 85% 75%, rgba(88, 42, 100, 0.22), transparent 40%);
+      background-attachment: fixed;
+    }
+    .gold-glow {
+      box-shadow: 0 0 25px rgba(201, 159, 75, 0.15);
+    }
+  </style>
+</head>
+<body class="font-sans antialiased pb-16 min-h-screen">
+
+  <!-- TELA DE LOGIN (SE NÃO AUTENTICADO) -->
+  <div id="loginScreen" class="fixed inset-0 z-50 bg-[#080f23]/95 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="bg-[#101e35] rounded-3xl p-8 max-w-md w-full shadow-2xl text-center border border-gold-500/40 gold-glow">
+      <div class="w-14 h-14 rounded-2xl bg-gold-500 text-slate-950 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-gold-500/20">
+        <i data-lucide="shield-lock" class="w-7 h-7"></i>
+      </div>
+      <h2 class="text-3xl font-serif font-black text-sand-100">Acesso da Liderança</h2>
+      <p class="text-xs text-sand-400 mt-1 mb-6">Painel restrito para conferência de comprovantes e gestão dos 2.000 pontos do Retiro 2027.</p>
+
+      <form onsubmit="handleLogin(event)" class="space-y-4">
+        <div>
+          <label class="block text-left text-xs font-bold text-gold-400 mb-1.5 uppercase tracking-wider">Senha dos Líderes</label>
+          <input type="password" id="adminPasswordInput" placeholder="Digite a senha..." 
+            class="w-full px-4 py-3 rounded-xl bg-[#080f23] border border-gold-500/30 focus:ring-2 focus:ring-gold-500 focus:outline-none text-sm text-center tracking-widest font-mono text-gold-300">
+        </div>
+        <p class="text-[11px] text-sand-500">Senha padrão inicial: <code class="bg-[#080f23] border border-gold-500/20 text-gold-400 px-1.5 py-0.5 rounded font-mono">lideres2027</code></p>
+        <button type="submit" id="btnLoginSubmit" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-400 hover:to-gold-500 text-slate-950 font-bold text-sm shadow-md transition uppercase tracking-wider">
+          Entrar no Painel
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- CONTEÚDO PRINCIPAL (QUANDO AUTENTICADO) -->
+  <div id="mainDashboard" class="hidden">
+    
+    <!-- NAVBAR LÍDERES -->
+    <header class="bg-[#101e35] text-white sticky top-0 z-40 border-b border-gold-500/20 shadow-md">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <a href="/" class="flex items-center gap-2 hover:opacity-80 transition">
+            <div class="w-9 h-9 rounded-xl bg-gold-500 flex items-center justify-center text-slate-950 font-black">
+              <i data-lucide="sparkles" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <span class="font-serif font-bold text-base leading-tight block text-sand-100">Painel dos Líderes</span>
+              <span class="text-[10px] text-gold-400 uppercase tracking-widest font-semibold">Jornada 2027</span>
+            </div>
+          </a>
+        </div>
+
+        <div class="flex items-center gap-2 sm:gap-3">
+          <a href="/sorteio" target="_blank" class="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-400 text-slate-950 text-xs font-bold transition flex items-center gap-1.5 shadow">
+            <i data-lucide="trophy" class="w-3.5 h-3.5"></i>
+            <span class="hidden sm:inline">Tela do Sorteio</span>
+          </a>
+
+          <button onclick="downloadCSVReport()" class="px-3.5 py-1.5 rounded-xl bg-[#080f23] hover:bg-[#152744] border border-gold-500/30 text-sand-200 text-xs font-semibold transition flex items-center gap-1.5">
+            <i data-lucide="download" class="w-3.5 h-3.5 text-gold-400"></i>
+            <span class="hidden sm:inline">Exportar CSV</span>
+          </button>
+
+          <button onclick="logout()" class="p-2 rounded-xl bg-[#080f23] hover:bg-red-500/20 border border-gold-500/20 text-sand-400 hover:text-red-400 transition" title="Sair">
+            <i data-lucide="log-out" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
+      
+      <!-- STATS CARDS -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+        <div class="bg-[#101e35] p-5 rounded-3xl border border-gold-500/30 shadow-sm">
+          <div class="flex items-center justify-between text-xs font-bold text-sand-400 uppercase tracking-wider">
+            <span>Total Confirmado</span>
+            <i data-lucide="wallet" class="w-4 h-4 text-gold-400"></i>
+          </div>
+          <div class="text-2xl font-black font-mono text-gold-300 mt-2" id="statPaidAmount">R$ 0,00</div>
+          <div class="text-[11px] text-sand-400 mt-1"><span id="statPaidTicketsCount" class="font-mono text-sand-200">0</span> pontos confirmados</div>
+        </div>
+
+        <div class="bg-[#101e35] p-5 rounded-3xl border border-gold-500/30 shadow-sm">
+          <div class="flex items-center justify-between text-xs font-bold text-sand-400 uppercase tracking-wider">
+            <span>Aguardando Pix</span>
+            <i data-lucide="clock" class="w-4 h-4 text-sand-400"></i>
+          </div>
+          <div class="text-2xl font-black font-mono text-sand-200 mt-2" id="statPendingAmount">R$ 0,00</div>
+          <div class="text-[11px] text-sand-400 mt-1"><span id="statPendingTicketsCount" class="font-mono text-sand-200">0</span> pontos reservados</div>
+        </div>
+
+        <div class="bg-[#101e35] p-5 rounded-3xl border border-gold-500/30 shadow-sm">
+          <div class="flex items-center justify-between text-xs font-bold text-sand-400 uppercase tracking-wider">
+            <span>Disponíveis</span>
+            <i data-lucide="ticket" class="w-4 h-4 text-gold-500"></i>
+          </div>
+          <div class="text-2xl font-black font-mono text-gold-400 mt-2" id="statAvailableTicketsCount">2000</div>
+          <div class="text-[11px] text-sand-400 mt-1">de 2.000 pontos no total</div>
+        </div>
+
+        <div class="bg-[#101e35] p-5 rounded-3xl border border-gold-500/30 shadow-sm">
+          <div class="flex items-center justify-between text-xs font-bold text-sand-400 uppercase tracking-wider">
+            <span>Progresso da Meta</span>
+            <i data-lucide="pie-chart" class="w-4 h-4 text-gold-400"></i>
+          </div>
+          <div class="text-2xl font-black font-mono text-sand-100 mt-2" id="statProgressPercentage">0%</div>
+          <div class="text-[11px] text-sand-400 mt-1"><span id="statSellersCount" class="font-mono text-sand-200">0</span> vendedores ativos</div>
+        </div>
+      </div>
+
+      <!-- NAVEGAÇÃO DE ABAS -->
+      <div class="flex border-b border-gold-500/20 mb-6 gap-2">
+        <button onclick="switchTab('pendentes')" id="tabBtn-pendentes" 
+          class="tab-btn px-4 py-2.5 font-bold text-sm border-b-2 border-gold-500 text-gold-300 flex items-center gap-2">
+          <i data-lucide="inbox" class="w-4 h-4"></i>
+          <span>Fila de Comprovação (<span id="badgePendingCount">0</span>)</span>
+        </button>
+
+        <button onclick="switchTab('confirmados')" id="tabBtn-confirmados" 
+          class="tab-btn px-4 py-2.5 font-bold text-sm border-b-2 border-transparent text-sand-400 hover:text-sand-200 flex items-center gap-2">
+          <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+          <span>Vendas Confirmadas</span>
+        </button>
+
+        <button onclick="switchTab('ranking')" id="tabBtn-ranking" 
+          class="tab-btn px-4 py-2.5 font-bold text-sm border-b-2 border-transparent text-sand-400 hover:text-sand-200 flex items-center gap-2">
+          <i data-lucide="trophy" class="w-4 h-4"></i>
+          <span>Ranking de Vendedores</span>
+        </button>
+
+        <button onclick="switchTab('config')" id="tabBtn-config" 
+          class="tab-btn px-4 py-2.5 font-bold text-sm border-b-2 border-transparent text-sand-400 hover:text-sand-200 flex items-center gap-2">
+          <i data-lucide="settings" class="w-4 h-4"></i>
+          <span>Configurações</span>
+        </button>
+      </div>
+
+      <!-- ABA 1: PENDENTES (FILA DE COMPROVAÇÃO DE PAGAMENTO) -->
+      <div id="tab-pendentes" class="tab-content space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-[#101e35] p-5 rounded-3xl border border-gold-500/25">
+          <div>
+            <h3 class="font-serif font-black text-sand-100 text-lg">Reservas Pendentes de Comprovação</h3>
+            <p class="text-xs text-sand-400">Confira o comprovante do Pix enviado pelo vendedor/comprador e confirme abaixo para validar os números.</p>
+          </div>
+          <button onclick="loadOrders()" class="px-3.5 py-2 rounded-xl bg-[#080f23] hover:bg-[#152744] text-gold-300 border border-gold-500/30 text-xs font-semibold flex items-center gap-1.5 self-start sm:self-auto">
+            <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+            <span>Atualizar Fila</span>
+          </button>
+        </div>
+
+        <div id="pendingOrdersList" class="space-y-3">
+          <!-- Injetado via JS -->
+        </div>
+      </div>
+
+      <!-- ABA 2: CONFIRMADOS -->
+      <div id="tab-confirmados" class="tab-content hidden space-y-4">
+        <div class="bg-[#101e35] p-4 rounded-3xl border border-gold-500/25 flex flex-col sm:flex-row gap-3 items-center justify-between">
+          <div class="relative w-full sm:w-80">
+            <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-3.5 text-sand-500"></i>
+            <input type="text" id="confirmedSearchInput" oninput="filterConfirmedOrders()" placeholder="Buscar por comprador ou vendedor..." 
+              class="w-full pl-10 pr-3 py-2 rounded-xl bg-[#080f23] border border-gold-500/30 text-xs focus:ring-2 focus:ring-gold-500 focus:outline-none text-sand-100 placeholder:text-sand-500">
+          </div>
+          <span class="text-xs text-sand-400"><strong id="confirmedOrdersCount" class="text-gold-300 font-mono">0</strong> vendas confirmadas</span>
+        </div>
+
+        <div id="confirmedOrdersList" class="space-y-3">
+          <!-- Injetado via JS -->
+        </div>
+      </div>
+
+      <!-- ABA 3: RANKING DE VENDEDORES -->
+      <div id="tab-ranking" class="tab-content hidden">
+        <div class="bg-[#101e35] rounded-3xl border border-gold-500/25 overflow-hidden shadow-xl">
+          <div class="p-5 border-b border-gold-500/20">
+            <h3 class="font-serif font-black text-sand-100 text-xl">Desempenho dos Vendedores da Igreja</h3>
+            <p class="text-xs text-sand-400">Acompanhe quem mais vendeu pontos e engajou na arrecadação do Retiro 2027.</p>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-[#080f23] text-sand-400 font-bold uppercase tracking-wider border-b border-gold-500/20">
+                <tr>
+                  <th class="p-4">#</th>
+                  <th class="p-4">Vendedor(a)</th>
+                  <th class="p-4 text-center">Pontos Pagos</th>
+                  <th class="p-4 text-center">Arrecadado</th>
+                  <th class="p-4 text-center">Pontos Reservados</th>
+                </tr>
+              </thead>
+              <tbody id="rankingTableBody" class="divide-y divide-gold-500/15">
+                <!-- Injetado via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ABA 4: CONFIGURAÇÕES -->
+      <div id="tab-config" class="tab-content hidden">
+        <div class="bg-[#101e35] p-6 sm:p-8 rounded-3xl border border-gold-500/30 shadow-xl max-w-2xl mx-auto gold-glow">
+          <h3 class="font-serif font-black text-sand-100 text-xl mb-1">Configurações da Campanha</h3>
+          <p class="text-xs text-sand-400 mb-6">Ajuste os dados de pagamento, valores e contatos dos líderes.</p>
+
+          <form onsubmit="saveConfig(event)" class="space-y-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-bold text-gold-400 mb-1.5 uppercase">Preço por Ponto (R$)</label>
+                <input type="text" id="cfgPrice" class="w-full px-3 py-2.5 rounded-xl bg-[#080f23] border border-gold-500/30 text-sm font-semibold font-mono text-sand-100">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-gold-400 mb-1.5 uppercase">Chave Pix Oficial</label>
+                <input type="text" id="cfgPixKey" class="w-full px-3 py-2.5 rounded-xl bg-[#080f23] border border-gold-500/30 text-sm font-semibold font-mono text-sand-100">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-bold text-gold-400 mb-1.5 uppercase">Titular / Beneficiário do Pix</label>
+                <input type="text" id="cfgPixBeneficiary" class="w-full px-3 py-2.5 rounded-xl bg-[#080f23] border border-gold-500/30 text-sm text-sand-100">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-gold-400 mb-1.5 uppercase">Instituição Financeira</label>
+                <input type="text" id="cfgPixBank" class="w-full px-3 py-2.5 rounded-xl bg-[#080f23] border border-gold-500/30 text-sm text-sand-100">
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-gold-400 mb-1.5 uppercase">WhatsApp dos Líderes (com DDD)</label>
+              <input type="text" id="cfgLeaderPhone" placeholder="Ex: 5511999999999" class="w-full px-3 py-2.5 rounded-xl bg-[#080f23] border border-gold-500/30 text-sm text-sand-100 font-mono">
+              <span class="text-[11px] text-sand-500 mt-1 block">Usado pelo vendedor para enviar o comprovante de pagamento diretamente aos líderes.</span>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-gold-400 mb-1.5 uppercase">Nova Senha de Acesso dos Líderes</label>
+              <input type="password" id="cfgNewPassword" placeholder="Deixe em branco se não quiser alterar" class="w-full px-3 py-2.5 rounded-xl bg-[#080f23] border border-gold-500/30 text-sm text-sand-100 font-mono">
+            </div>
+
+            <div class="pt-4 border-t border-gold-500/20 flex justify-end">
+              <button type="submit" class="px-7 py-3 rounded-xl bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-400 hover:to-gold-500 text-slate-950 font-bold text-xs uppercase tracking-wider shadow-lg transition">
+                Salvar Configurações
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    let authToken = localStorage.getItem('rifa_leader_token') || '';
+    let ordersData = [];
+    let currentConfig = {};
+
+    async function init() {
+      if (authToken) {
+        verifySession();
+      } else {
+        showLogin();
+      }
+      lucide.createIcons();
+    }
+
+    function showLogin() {
+      document.getElementById('loginScreen').classList.remove('hidden');
+      document.getElementById('mainDashboard').classList.add('hidden');
+    }
+
+    async function handleLogin(e) {
+      e.preventDefault();
+      const pwd = document.getElementById('adminPasswordInput').value.trim();
+      if (!pwd) return;
+
+      const btn = document.getElementById('btnLoginSubmit');
+      btn.innerText = "Verificando...";
+      btn.disabled = true;
+
+      try {
+        const res = await fetch('/api/admin/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password: pwd })
+        });
+
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.detail || "Senha inválida.");
+
+        authToken = data.token;
+        localStorage.setItem('rifa_leader_token', authToken);
+
+        document.getElementById('loginScreen').classList.add('hidden');
+        document.getElementById('mainDashboard').classList.remove('hidden');
+        loadAllData();
+
+      } catch (err) {
+        alert(err.message);
+      } finally {
+        btn.innerText = "Entrar no Painel";
+        btn.disabled = false;
+      }
+    }
+
+    async function verifySession() {
+      try {
+        const res = await fetch('/api/admin/orders', {
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        if (res.ok) {
+          document.getElementById('loginScreen').classList.add('hidden');
+          document.getElementById('mainDashboard').classList.remove('hidden');
+          loadAllData();
+        } else {
+          logout();
+        }
+      } catch (e) {
+        logout();
+      }
+    }
+
+    function logout() {
+      localStorage.removeItem('rifa_leader_token');
+      authToken = '';
+      showLogin();
+    }
+
+    async function loadAllData() {
+      await Promise.all([
+        loadStats(),
+        loadOrders(),
+        loadRanking(),
+        loadConfigForm()
+      ]);
+      lucide.createIcons();
+    }
+
+    async function loadStats() {
+      const res = await fetch('/api/stats');
+      const stats = await res.json();
+
+      document.getElementById('statPaidAmount').innerText = `R$ ${stats.total_paid_amount.toFixed(2).replace('.', ',')}`;
+      document.getElementById('statPaidTicketsCount').innerText = stats.paid_count;
+      document.getElementById('statPendingAmount').innerText = `R$ ${stats.total_pending_amount.toFixed(2).replace('.', ',')}`;
+      document.getElementById('statPendingTicketsCount').innerText = stats.reserved_count;
+      document.getElementById('statAvailableTicketsCount').innerText = stats.available_count;
+      document.getElementById('statProgressPercentage').innerText = `${stats.percentage_paid}%`;
+      document.getElementById('statSellersCount').innerText = stats.seller_count;
+      document.getElementById('badgePendingCount').innerText = stats.reserved_count;
+    }
+
+    async function loadOrders() {
+      const res = await fetch('/api/admin/orders', {
+        headers: { 'Authorization': `Bearer ${authToken}` }
+      });
+      ordersData = await res.json();
+      renderOrders();
+    }
+
+    function renderOrders() {
+      const pendingList = document.getElementById('pendingOrdersList');
+      const confirmedList = document.getElementById('confirmedOrdersList');
+
+      const pendings = ordersData.filter(o => o.status === 'pendente');
+      const confirmeds = ordersData.filter(o => o.status === 'confirmado');
+
+      document.getElementById('badgePendingCount').innerText = pendings.length;
+      document.getElementById('confirmedOrdersCount').innerText = confirmeds.length;
+
+      // Render Pendentes
+      if (pendings.length === 0) {
+        pendingList.innerHTML = `
+          <div class="bg-[#101e35] p-8 rounded-3xl border border-gold-500/25 text-center text-sand-400">
+            <i data-lucide="check-circle-2" class="w-10 h-10 mx-auto text-gold-400 mb-2"></i>
+            <h4 class="font-serif font-bold text-sand-100 text-lg">Fila Limpa! Nenhuma reserva pendente.</h4>
+            <p class="text-xs text-sand-400 mt-1">Todos os pagamentos foram conferidos e confirmados.</p>
+          </div>
+        `;
+      } else {
+        pendingList.innerHTML = pendings.map(o => `
+          <div class="bg-[#101e35] p-5 rounded-3xl border border-gold-500/35 shadow-md flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+            <div>
+              <div class="flex items-center gap-2 mb-1.5">
+                <span class="text-xs font-mono font-bold bg-[#080f23] text-gold-400 border border-gold-500/25 px-2 py-0.5 rounded">#${o.id}</span>
+                <h4 class="font-bold text-sand-100 text-base">${o.buyer_name}</h4>
+                <span class="text-xs text-sand-400 font-mono">• Tel: ${o.buyer_phone}</span>
+              </div>
+
+              <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-sand-300 mb-3">
+                <span>Vendido por: <strong class="text-gold-300">${o.seller_name}</strong></span>
+                <span>Data: ${new Date(o.created_at).toLocaleString('pt-BR')}</span>
+                <span>Valor: <strong class="text-gold-400 font-black font-mono text-sm">R$ ${parseFloat(o.total_amount).toFixed(2).replace('.', ',')}</strong></span>
+              </div>
+
+              <div class="flex flex-wrap items-center gap-1.5">
+                <span class="text-xs font-bold text-sand-400 mr-1">Pontos (${o.ticket_list.length}):</span>
+                ${o.ticket_list.map(n => `
+                  <span class="px-2 py-0.5 rounded-md bg-[#88652e] text-gold-100 font-mono text-xs font-bold border border-gold-400/40">
+                    ${String(n).padStart(4, '0')}
+                  </span>
+                `).join('')}
+              </div>
+            </div>
+
+            <!-- Ações do Líder -->
+            <div class="flex flex-wrap items-center gap-2 lg:flex-shrink-0 pt-3 lg:pt-0 border-t lg:border-t-0 border-gold-500/20">
+              <a href="https://wa.me/55${o.buyer_phone.replace(/\D/g, '')}" target="_blank" 
+                class="px-3 py-2 rounded-xl bg-[#080f23] hover:bg-[#152744] text-sand-200 border border-gold-500/30 text-xs font-bold transition flex items-center gap-1.5">
+                <i data-lucide="message-circle" class="w-4 h-4 text-emerald-400"></i>
+                <span>Cobrar Pix</span>
+              </a>
+
+              <button onclick="confirmOrderPayment(${o.id})" 
+                class="px-4 py-2 rounded-xl bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-400 hover:to-gold-500 text-slate-950 text-xs font-bold transition flex items-center gap-1.5 shadow">
+                <i data-lucide="check" class="w-4 h-4"></i>
+                <span>Confirmar Pagamento</span>
+              </button>
+
+              <button onclick="cancelOrderReservation(${o.id})" 
+                class="px-3 py-2 rounded-xl bg-red-950/40 hover:bg-red-900/60 border border-red-500/30 text-red-300 text-xs font-bold transition flex items-center gap-1.5">
+                <i data-lucide="x" class="w-4 h-4"></i>
+                <span>Cancelar</span>
+              </button>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      renderConfirmedList(confirmeds);
+      lucide.createIcons();
+    }
+
+    function renderConfirmedList(list) {
+      const container = document.getElementById('confirmedOrdersList');
+      if (list.length === 0) {
+        container.innerHTML = `<div class="bg-[#101e35] p-6 rounded-2xl border border-gold-500/20 text-center text-sand-500 text-xs">Nenhuma venda confirmada encontrada.</div>`;
+        return;
+      }
+
+      container.innerHTML = list.map(o => `
+        <div class="bg-[#101e35] p-4 rounded-2xl border border-gold-500/20 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs">
+          <div>
+            <div class="flex items-center gap-2 mb-1">
+              <span class="font-mono font-bold text-sand-400">#${o.id}</span>
+              <strong class="text-sm font-bold text-sand-100">${o.buyer_name}</strong>
+              <span class="text-sand-400 font-mono">(${o.buyer_phone})</span>
+              <span class="px-2 py-0.5 rounded-full bg-gold-500/20 text-gold-300 border border-gold-500/40 text-[10px] font-bold">PAGO</span>
+            </div>
+            <div class="text-sand-400">
+              Vendedor: <strong class="text-sand-200">${o.seller_name}</strong> • Confirmado em: ${o.confirmed_at ? new Date(o.confirmed_at).toLocaleString('pt-BR') : '-'}
+            </div>
+            <div class="flex flex-wrap gap-1 mt-2">
+              ${o.ticket_list.map(n => `
+                <span class="px-2 py-0.5 rounded bg-gradient-to-r from-gold-500 to-gold-600 text-slate-950 font-mono font-bold text-[11px]">
+                  ${String(n).padStart(4, '0')}
+                </span>
+              `).join('')}
+            </div>
+          </div>
+          <div class="text-right">
+            <span class="block text-sand-500">Total Pago:</span>
+            <strong class="text-base font-black font-mono text-gold-300">R$ ${parseFloat(o.total_amount).toFixed(2).replace('.', ',')}</strong>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function filterConfirmedOrders() {
+      const q = document.getElementById('confirmedSearchInput').value.toLowerCase().trim();
+      const confirmeds = ordersData.filter(o => o.status === 'confirmado');
+      const filtered = confirmeds.filter(o => 
+        o.buyer_name.toLowerCase().includes(q) ||
+        o.seller_name.toLowerCase().includes(q) ||
+        (o.ticket_numbers && o.ticket_numbers.includes(q))
+      );
+      renderConfirmedList(filtered);
+    }
+
+    async function confirmOrderPayment(orderId) {
+      if (!confirm("Confirmar o recebimento do Pix para este pedido? Os pontos serão marcados como PAGOS e garantidos para o comprador.")) {
+        return;
+      }
+
+      try {
+        const res = await fetch(`/api/admin/orders/${orderId}/confirm`, {
+          method: 'POST',
+          headers: { 
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ leader_name: "Líder" })
+        });
+
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.detail || "Erro ao confirmar pagamento.");
+
+        loadAllData();
+      } catch (err) {
+        alert("Erro: " + err.message);
+      }
+    }
+
+    async function cancelOrderReservation(orderId) {
+      if (!confirm("Tem certeza que deseja cancelar esta reserva? Os pontos voltarão a ficar DISPONÍVEIS para venda imediatamente.")) {
+        return;
+      }
+
+      try {
+        const res = await fetch(`/api/admin/orders/${orderId}/cancel`, {
+          method: 'POST',
+          headers: { 
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.detail || "Erro ao cancelar.");
+
+        loadAllData();
+      } catch (err) {
+        alert("Erro: " + err.message);
+      }
+    }
+
+    async function loadRanking() {
+      const res = await fetch('/api/admin/ranking', {
+        headers: { 'Authorization': `Bearer ${authToken}` }
+      });
+      const ranking = await res.json();
+
+      const tbody = document.getElementById('rankingTableBody');
+      if (ranking.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-sand-500">Nenhuma venda registrada ainda.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = ranking.map((r, i) => `
+        <tr class="hover:bg-[#080f23]/50 transition">
+          <td class="p-4 font-mono font-bold ${i === 0 ? 'text-gold-400 text-sm' : 'text-sand-500'}">${i + 1}º</td>
+          <td class="p-4 font-bold text-sand-100">${r.seller_name}</td>
+          <td class="p-4 text-center font-black font-mono text-gold-300">${r.paid_tickets}</td>
+          <td class="p-4 text-center font-bold font-mono text-sand-200">R$ ${r.paid_amount.toFixed(2).replace('.', ',')}</td>
+          <td class="p-4 text-center font-mono text-sand-400">${r.pending_tickets}</td>
+        </tr>
+      `).join('');
+    }
+
+    async function loadConfigForm() {
+      const res = await fetch('/api/config');
+      currentConfig = await res.json();
+
+      document.getElementById('cfgPrice').value = currentConfig.price_per_ticket || '10.00';
+      document.getElementById('cfgPixKey').value = currentConfig.pix_key || '';
+      document.getElementById('cfgPixBeneficiary').value = currentConfig.pix_beneficiary || '';
+      document.getElementById('cfgPixBank').value = currentConfig.pix_bank || '';
+      document.getElementById('cfgLeaderPhone').value = currentConfig.leader_whatsapp || '';
+    }
+
+    async function saveConfig(e) {
+      e.preventDefault();
+      const body = {
+        price_per_ticket: document.getElementById('cfgPrice').value.trim(),
+        pix_key: document.getElementById('cfgPixKey').value.trim(),
+        pix_beneficiary: document.getElementById('cfgPixBeneficiary').value.trim(),
+        pix_bank: document.getElementById('cfgPixBank').value.trim(),
+        leader_whatsapp: document.getElementById('cfgLeaderPhone').value.trim()
+      };
+
+      const newPass = document.getElementById('cfgNewPassword').value.trim();
+      if (newPass) {
+        body.admin_password = newPass;
+      }
+
+      try {
+        const res = await fetch('/api/admin/config', {
+          method: 'POST',
+          headers: { 
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(body)
+        });
+
+        if (!res.ok) throw new Error("Erro ao salvar configurações.");
+
+        alert("Configurações salvas com sucesso!");
+        if (newPass) {
+          authToken = newPass;
+          localStorage.setItem('rifa_leader_token', newPass);
+        }
+        loadAllData();
+      } catch (err) {
+        alert(err.message);
+      }
+    }
+
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('border-gold-500', 'text-gold-300');
+        btn.classList.add('border-transparent', 'text-sand-400');
+      });
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
+
+      const activeBtn = document.getElementById(`tabBtn-${tabName}`);
+      const activeContent = document.getElementById(`tab-${tabName}`);
+
+      activeBtn.classList.add('border-gold-500', 'text-gold-300');
+      activeBtn.classList.remove('border-transparent', 'text-sand-400');
+      activeContent.classList.remove('hidden');
+    }
+
+    function downloadCSVReport() {
+      window.location.href = `/api/admin/export.csv?token=${encodeURIComponent(authToken)}`;
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>

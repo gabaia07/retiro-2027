@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rifa Beneficente - Retiro Espiritual 2027 | Jornada à Terra Prometida</title>
+  
+  <!-- Fontes Oficiais: Cormorant Garamond, DM Sans e Space Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600;1,700&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['"Cormorant Garamond"', 'serif'],
+            sans: ['"DM Sans"', '-apple-system', 'sans-serif'],
+            mono: ['"Space Mono"', 'monospace'],
+          },
+          colors: {
+            bgDark: '#080f23',
+            cardDark: '#101e35',
+            cardBorder: 'rgba(201, 159, 75, 0.25)',
+            gold: {
+              100: '#f0dfbb',
+              200: '#e5c47e',
+              300: '#dfc173',
+              400: '#d4a955',
+              500: '#c99f4b',
+              600: '#bd9650',
+              700: '#88652e',
+              800: '#644a2b',
+            },
+            sand: {
+              50: '#fcfaf6',
+              100: '#f4ede1',
+              200: '#eee3cd',
+              300: '#e6d8bb',
+              400: '#c6b99f',
+              500: '#a99467',
+              600: '#8f98ab',
+            },
+            royal: {
+              800: '#291839',
+              600: '#9b61ad',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #080f23;
+      color: #eee3cd;
+      background-image: 
+        radial-gradient(circle at 30% 0%, rgba(47, 61, 104, 0.35), transparent 45%),
+        radial-gradient(circle at 85% 75%, rgba(88, 42, 100, 0.22), transparent 40%);
+      background-attachment: fixed;
+    }
+    .ticket-badge {
+      transition: all 0.15s ease-in-out;
+    }
+    .ticket-badge:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(201, 159, 75, 0.2);
+    }
+    .gold-border {
+      border: 1px solid rgba(201, 159, 75, 0.3);
+    }
+    .gold-glow {
+      box-shadow: 0 0 25px rgba(201, 159, 75, 0.15);
+    }
+  </style>
+</head>
+<body class="font-sans antialiased selection:bg-gold-500 selection:text-slate-950 min-h-screen">
+
+  <!-- TOP BAR AVISO BÍBLICO / BENEFICENTE -->
+  <div class="bg-gradient-to-r from-gold-700 via-gold-600 to-gold-700 text-slate-950 text-xs sm:text-sm py-2 px-4 text-center font-bold tracking-wide shadow-md flex items-center justify-center gap-2 border-b border-gold-400/30">
+    <i data-lucide="sparkles" class="w-4 h-4 fill-current text-gold-200"></i>
+    <span>Jornada à Terra Prometida • 100% em prol do <strong>Retiro Espiritual 2027</strong></span>
+  </div>
+
+  <!-- NAVBAR NOBRE -->
+  <nav class="sticky top-0 z-50 bg-[#080f23]/90 backdrop-blur-md border-b border-gold-500/20 shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      
+      <!-- LOGO -->
+      <a href="/" class="flex items-center gap-3 group">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-gold-400 to-gold-600 flex items-center justify-center text-slate-950 shadow-md shadow-gold-500/20 group-hover:scale-105 transition">
+          <i data-lucide="flame" class="w-5 h-5 fill-current"></i>
+        </div>
+        <div>
+          <span class="font-serif font-bold text-xl text-gold-300 block leading-tight tracking-wide">Retiro 2027</span>
+          <span class="text-[10px] text-sand-400 font-semibold tracking-widest uppercase">Terra Prometida</span>
+        </div>
+      </a>
+
+      <!-- LINKS NAVEGAÇÃO -->
+      <div class="hidden md:flex items-center gap-7 text-xs font-semibold uppercase tracking-wider text-sand-300">
+        <a href="#apresentacao" class="hover:text-gold-400 transition">O Retiro</a>
+        <a href="#premios" class="hover:text-gold-400 transition">Prêmios</a>
+        <a href="#pagamento" class="hover:text-gold-400 transition">Chave Pix</a>
+        <a href="#consulta" class="hover:text-gold-400 transition">Consultar Pontos</a>
+        <a href="#tabela" class="hover:text-gold-400 transition">2.000 Números</a>
+      </div>
+
+      <!-- BOTÕES DE AÇÃO -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <button onclick="openMobileQrModal()" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#101e35] hover:bg-[#152744] text-gold-300 text-xs font-semibold border border-gold-500/30 transition shadow-sm" title="Abrir no Celular por QR Code">
+          <i data-lucide="smartphone" class="w-4 h-4 text-gold-400"></i>
+          <span>No Celular</span>
+        </button>
+
+        <a href="/vendedor" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-400 hover:to-gold-500 text-slate-950 text-xs sm:text-sm font-bold shadow-md shadow-gold-500/20 transition transform hover:-translate-y-0.5">
+          <i data-lucide="tag" class="w-4 h-4"></i>
+          <span>Vendedor</span>
+        </a>
+
+        <a href="/lideres" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#101e35] hover:bg-[#152744] text-sand-200 text-xs sm:text-sm font-semibold border border-white/10 transition">
+          <i data-lucide="shield-check" class="w-4 h-4 text-gold-400"></i>
+          <span>Líderes</span>
+        </a>
+      </div>
+
+    </div>
+  </nav>
+
+  <!-- HERO SECTION ESTILO TERRA PROMETIDA -->
+  <header class="relative overflow-hidden py-16 sm:py-24 border-b border-gold-500/15">
+    <div class="relative max-w-5xl mx-auto px-4 sm:px-6 text-center">
+      
+      <!-- BADGE DE DESTAQUE -->
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#101e35]/90 border border-gold-500/40 text-gold-300 text-xs sm:text-sm font-semibold mb-6 shadow-md tracking-wider">
+        <i data-lucide="scroll" class="w-4 h-4 text-gold-400"></i>
+        <span>Jornada à Terra Prometida • Grande Rifa 2027</span>
+      </div>
+
+      <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight font-serif text-sand-100 mb-6 leading-tight">
+        Invista no Retiro Espiritual e <br>
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-gold-300 via-gold-400 to-gold-200">
+          Concorra a Grandes Prêmios!
+        </span>
+      </h1>
+
+      <p class="max-w-2xl mx-auto text-base sm:text-lg text-sand-300 mb-8 font-normal leading-relaxed" id="heroIntroText">
+        São <strong>2.000 pontos</strong> disponíveis. Toda a renda arrecadada será revertida para o transporte, hospedagem e alimentação dos participantes do nosso Retiro Espiritual 2027.
+      </p>
+
+      <!-- BARRA DE PROGRESSO & METRICAS COM DESIGN TERRA PROMETIDA -->
+      <div class="max-w-3xl mx-auto bg-[#101e35]/85 backdrop-blur-md border border-gold-500/30 p-6 sm:p-8 rounded-3xl shadow-2xl mb-10 gold-glow">
+        <div class="flex justify-between items-end mb-3">
+          <div class="text-left">
+            <span class="text-[11px] uppercase tracking-widest text-sand-400 font-bold">Progresso da Campanha</span>
+            <div class="text-3xl font-black text-gold-300 font-mono flex items-center gap-2">
+              <span id="statPercentage">0%</span>
+              <span class="text-xs font-normal text-sand-400 font-sans">(Pontos Confirmados)</span>
+            </div>
+          </div>
+          <div class="text-right">
+            <span class="text-xs text-sand-400">Meta Oficial:</span>
+            <span class="text-lg font-bold text-sand-100 font-mono block">2.000 Pontos</span>
+          </div>
+        </div>
+
+        <!-- Barra Dourada -->
+        <div class="w-full bg-[#080f23] rounded-full h-4 overflow-hidden p-0.5 border border-gold-500/30">
+          <div id="progressBar" class="bg-gradient-to-r from-gold-600 via-gold-400 to-yellow-300 h-full rounded-full transition-all duration-1000 ease-out shadow-sm" style="width: 0%"></div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-3 sm:gap-4 mt-6 pt-5 border-t border-gold-500/20 text-center">
+          <div class="p-3 rounded-2xl bg-[#080f23]/60 border border-gold-500/20">
+            <span class="block text-xl sm:text-2xl font-black font-mono text-gold-300" id="statPaid">0</span>
+            <span class="text-[10px] sm:text-xs text-sand-400 font-semibold uppercase tracking-wider">Pontos Pagos</span>
+          </div>
+          <div class="p-3 rounded-2xl bg-[#080f23]/60 border border-gold-500/20">
+            <span class="block text-xl sm:text-2xl font-black font-mono text-sand-300" id="statReserved">0</span>
+            <span class="text-[10px] sm:text-xs text-sand-400 font-semibold uppercase tracking-wider">Reservados</span>
+          </div>
+          <div class="p-3 rounded-2xl bg-[#080f23]/60 border border-gold-500/20">
+            <span class="block text-xl sm:text-2xl font-black font-mono text-gold-400" id="statAvailable">2.000</span>
+            <span class="text-[10px] sm:text-xs text-sand-400 font-semibold uppercase tracking-wider">Disponíveis</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- BOTÕES DE CHAMADA -->
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href="#tabela" class="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-400 hover:to-gold-500 text-slate-950 font-black text-sm uppercase tracking-wider shadow-lg shadow-gold-500/25 transition transform hover:-translate-y-0.5 flex items-center justify-center gap-2">
+          <i data-lucide="grid-3x3" class="w-4 h-4"></i>
+          <span>Escolher Meus Números</span>
+        </a>
+        <a href="#consulta" class="w-full sm:w-auto px-7 py-3.5 rounded-2xl bg-[#101e35] hover:bg-[#152744] text-sand-100 font-semibold text-sm border border-gold-500/30 transition flex items-center justify-center gap-2">
+          <i data-lucide="search" class="w-4 h-4 text-gold-400"></i>
+          <span>Consultar Meus Pontos Comprados</span>
+        </a>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- APRESENTAÇÃO DO PROJETO BENEFICENTE -->
+  <section id="apresentacao" class="py-16 sm:py-20 border-b border-gold-500/15">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+        <div>
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#101e35] text-gold-400 text-xs font-bold uppercase tracking-wider mb-3 border border-gold-500/30">
+            <i data-lucide="compass" class="w-3.5 h-3.5"></i>
+            <span>Nossa Jornada</span>
+          </div>
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-sand-100 font-serif mb-4 leading-tight">
+            Por que apoiar o nosso Retiro 2027?
+          </h2>
+          <p class="text-sand-300 mb-4 leading-relaxed text-sm sm:text-base" id="aboutTextContent">
+            O retiro anual é um dos momentos mais aguardados pela nossa juventude e membros. São dias dedicados à oração, comunhão fraterna, estudo da Palavra e experiências que marcam vidas para sempre.
+          </p>
+          <p class="text-sand-300 mb-6 leading-relaxed text-sm sm:text-base">
+            Muitos participantes que não teriam condições financeiras de arcar com os custos individuais terão a oportunidade de viver essa jornada graças a você! <strong>Cada ponto de R$ <span class="ticketPriceValue">10,00</span> é uma semente de amor e esperança.</strong>
+          </p>
+          
+          <div class="p-5 rounded-2xl bg-[#101e35] border border-gold-500/30 text-gold-200 text-sm italic flex items-start gap-3 shadow-inner">
+            <i data-lucide="quote" class="w-5 h-5 flex-shrink-0 text-gold-400"></i>
+            <span id="bibleVerseText">"Cada um dê conforme determinou em seu coração, não com tristeza ou por obrigação, pois Deus ama quem dá com alegria." (2 Coríntios 9:7)</span>
+          </div>
+        </div>
+
+        <!-- COMO FUNCIONA O PROCESSO -->
+        <div class="bg-[#101e35]/80 p-8 rounded-3xl border border-gold-500/30 shadow-xl relative">
+          <h3 class="text-2xl font-serif font-bold text-gold-300 mb-6 flex items-center gap-2">
+            <i data-lucide="check-circle-2" class="w-5 h-5 text-gold-400"></i>
+            <span>Como Funciona a Rifa</span>
+          </h3>
+
+          <div class="space-y-6">
+            <div class="flex gap-4 items-start">
+              <div class="w-8 h-8 rounded-full bg-gold-500 text-slate-950 font-black font-mono flex items-center justify-center flex-shrink-0 text-xs shadow-md">
+                1
+              </div>
+              <div>
+                <h4 class="font-bold text-sand-100 text-sm">Escolha seus Números</h4>
+                <p class="text-sand-400 text-xs sm:text-sm">Fale com seu vendedor ou veja na tabela os pontos disponíveis entre 0001 e 2000.</p>
+              </div>
+            </div>
+
+            <div class="flex gap-4 items-start">
+              <div class="w-8 h-8 rounded-full bg-gold-500 text-slate-950 font-black font-mono flex items-center justify-center flex-shrink-0 text-xs shadow-md">
+                2
+              </div>
+              <div>
+                <h4 class="font-bold text-sand-100 text-sm">Registro do Comprador</h4>
+                <p class="text-sand-400 text-xs sm:text-sm">O vendedor cadastra seu nome e WhatsApp. Os números ficam temporariamente reservados para você.</p>
+              </div>
+            </div>
+
+            <div class="flex gap-4 items-start">
+              <div class="w-8 h-8 rounded-full bg-gold-500 text-slate-950 font-black font-mono flex items-center justify-center flex-shrink-0 text-xs shadow-md">
+                3
+              </div>
+              <div>
+                <h4 class="font-bold text-sand-100 text-sm">Pagamento e Comprovação Pix</h4>
+                <p class="text-sand-400 text-xs sm:text-sm">Você transfere via Pix e envia o comprovante. Os líderes conferem no site e dão baixa imediatamente.</p>
+              </div>
+            </div>
+
+            <div class="flex gap-4 items-start">
+              <div class="w-8 h-8 rounded-full bg-gradient-to-r from-gold-400 to-yellow-300 text-slate-950 font-black font-mono flex items-center justify-center flex-shrink-0 text-xs shadow-md">
+                4
+              </div>
+              <div>
+                <h4 class="font-bold text-gold-300 text-sm">Ponto Confirmado no Sorteio</h4>
+                <p class="text-sand-400 text-xs sm:text-sm">Seu ponto é validado como <strong>PAGO</strong> e concorre oficialmente aos prêmios no culto!</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRÊMIOS -->
+  <section id="premios" class="py-16 sm:py-20 border-b border-gold-500/15">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="text-center max-w-2xl mx-auto mb-12">
+        <span class="text-gold-400 font-bold text-xs uppercase tracking-widest">Premiação Oficial</span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-sand-100 font-serif mt-1">Conheça os Prêmios do Sorteio</h2>
+        <p class="text-sand-400 text-sm mt-2">O sorteio será realizado ao vivo com projeção de todos os bilhetes confirmados!</p>
+      </div>
+
+      <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8" id="prizesContainer">
+        <!-- Renderizado dinamicamente via JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- INFORMAÇÕES DE PAGAMENTO PIX -->
+  <section id="pagamento" class="py-16 sm:py-20 border-b border-gold-500/15">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#101e35] text-gold-400 text-xs font-bold uppercase tracking-wider mb-3 border border-gold-500/30">
+        <i data-lucide="qr-code" class="w-3.5 h-3.5"></i>
+        <span>Dados Oficiais de Pagamento</span>
+      </div>
+      <h2 class="text-3xl sm:text-4xl font-extrabold text-sand-100 font-serif mb-3">Pague Facilmente via Pix</h2>
+      <p class="text-sand-300 text-sm max-w-lg mx-auto mb-8">
+        Após fazer a sua reserva com o vendedor, envie o valor correspondente (R$ <span class="ticketPriceValue">10,00</span> por ponto) utilizando a chave oficial:
+      </p>
+
+      <div class="bg-[#101e35] p-8 rounded-3xl border border-gold-500/35 shadow-2xl max-w-xl mx-auto gold-glow">
+        <div class="flex flex-col items-center">
+          <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-gold-400 to-gold-600 text-slate-950 flex items-center justify-center mb-4 shadow-lg shadow-gold-500/20">
+            <i data-lucide="banknote" class="w-8 h-8"></i>
+          </div>
+
+          <span class="text-xs uppercase font-bold text-sand-400 tracking-wider">Chave Pix da Igreja</span>
+          
+          <div class="flex items-center gap-2 mt-3 p-3 bg-[#080f23] rounded-xl border border-gold-500/30 w-full max-w-md shadow-inner justify-between">
+            <span class="font-mono text-sm sm:text-base font-bold text-gold-300 break-all select-all" id="displayPixKey">retiro2027@igreja.org</span>
+            <button onclick="copyPixKey()" class="px-3.5 py-2 bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-400 hover:to-gold-500 text-slate-950 text-xs font-bold rounded-lg flex items-center gap-1.5 transition flex-shrink-0">
+              <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+              <span id="btnCopyText">Copiar</span>
+            </button>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4 text-left w-full mt-6 pt-5 border-t border-gold-500/20 text-xs text-sand-300">
+            <div>
+              <span class="font-medium text-sand-500 block">Titular:</span>
+              <strong class="text-sand-100 text-sm" id="displayPixName">Tesouraria Retiro 2027</strong>
+            </div>
+            <div>
+              <span class="font-medium text-sand-500 block">Instituição:</span>
+              <strong class="text-sand-100 text-sm" id="displayPixBank">Banco Inter / Nubank</strong>
+            </div>
+          </div>
+
+          <div class="mt-6 text-xs text-sand-300 bg-[#080f23]/80 p-3.5 rounded-xl border border-gold-500/25 w-full text-center">
+            <strong>Lembrete:</strong> Após transferir, envie o comprovante ao vendedor ou aos líderes para confirmação dos seus pontos!
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AUTO-CONSULTA DO COMPRADOR -->
+  <section id="consulta" class="py-16 sm:py-20 border-b border-gold-500/15">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#101e35] text-gold-400 text-xs font-bold uppercase tracking-wider mb-3 border border-gold-500/30">
+        <i data-lucide="user-check" class="w-3.5 h-3.5"></i>
+        <span>Consulta Rápida</span>
+      </div>
+      <h2 class="text-3xl sm:text-4xl font-extrabold text-sand-100 font-serif mb-2">Já comprou? Consulte seus Pontos!</h2>
+      <p class="text-sand-400 text-sm mb-8">Digite seu nome ou telefone para verificar os números registrados em seu nome e o status de pagamento.</p>
+
+      <div class="bg-[#101e35] p-6 sm:p-8 rounded-3xl shadow-xl border border-gold-500/30">
+        <div class="flex flex-col sm:flex-row gap-3">
+          <div class="relative flex-1">
+            <i data-lucide="search" class="w-5 h-5 absolute left-3.5 top-3.5 text-sand-500"></i>
+            <input type="text" id="buyerSearchInput" placeholder="Digite seu Nome ou Telefone..." 
+              class="w-full pl-11 pr-4 py-3 rounded-xl bg-[#080f23] border border-gold-500/30 focus:outline-none focus:ring-2 focus:ring-gold-500 text-sand-100 text-sm placeholder:text-sand-500">
+          </div>
+          <button onclick="handleBuyerSearch()" class="px-7 py-3 rounded-xl bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-400 hover:to-gold-500 text-slate-950 font-bold text-sm shadow transition flex items-center justify-center gap-2">
+            <span>Buscar Meus Pontos</span>
+          </button>
+        </div>
+
+        <!-- RESULTADOS DA CONSULTA -->
+        <div id="searchResultsArea" class="mt-6 text-left hidden">
+          <!-- Conteúdo inserido via JS -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VISUALIZADOR DOS 2.000 NÚMEROS -->
+  <section id="tabela" class="py-16 sm:py-20">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+        <div>
+          <span class="text-gold-400 font-bold text-xs uppercase tracking-widest">Transparência Total</span>
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-sand-100 font-serif mt-1">Painel dos 2.000 Pontos</h2>
+          <p class="text-sand-400 text-sm mt-1">Veja a disponibilidade de cada número em tempo real.</p>
+        </div>
+
+        <!-- LEGENDA DE CORES -->
+        <div class="flex flex-wrap items-center gap-4 text-xs font-semibold">
+          <div class="flex items-center gap-1.5">
+            <span class="w-3.5 h-3.5 rounded-md bg-[#101e35] border border-gold-500/40"></span>
+            <span class="text-sand-300">Disponível</span>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <span class="w-3.5 h-3.5 rounded-md bg-[#88652e]/50 border border-gold-400"></span>
+            <span class="text-sand-300">Reservado (Pendente)</span>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <span class="w-3.5 h-3.5 rounded-md bg-gradient-to-r from-gold-500 to-gold-600 text-slate-950"></span>
+            <span class="text-sand-300">Pago & Confirmado</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- FILTROS DE FAIXA (CENTENAS) E BUSCA ESPECÍFICA -->
+      <div class="bg-[#101e35] p-4 sm:p-5 rounded-2xl border border-gold-500/25 mb-6 flex flex-col md:flex-row gap-4 items-center justify-between">
+        <div class="flex flex-wrap items-center gap-2 text-xs font-medium w-full md:w-auto">
+          <span class="text-sand-400 mr-1 uppercase tracking-wider text-[11px] font-bold">Faixa:</span>
+          <button onclick="setRangeFilter(1, 200)" class="range-btn px-3 py-1.5 rounded-lg bg-gold-500 text-slate-950 font-bold" data-range="1-200">0001 - 0200</button>
+          <button onclick="setRangeFilter(201, 400)" class="range-btn px-3 py-1.5 rounded-lg bg-[#080f23] border border-gold-500/30 text-sand-300 hover:text-gold-300" data-range="201-400">0201 - 0400</button>
+          <button onclick="setRangeFilter(401, 600)" class="range-btn px-3 py-1.5 rounded-lg bg-[#080f23] border border-gold-500/30 text-sand-300 hover:text-gold-300" data-range="401-600">0401 - 0600</button>
+          <button onclick="setRangeFilter(601, 800)" class="range-btn px-3 py-1.5 rounded-lg bg-[#080f23] border border-gold-500/30 text-sand-300 hover:text-gold-300" data-range="601-800">0601 - 0800</button>
+          <button onclick="setRangeFilter(801, 1000)" class="range-btn px-3 py-1.5 rounded-lg bg-[#080f23] border border-gold-500/30 text-sand-300 hover:text-gold-300" data-range="801-1000">0801 - 1000</button>
+          <button onclick="setRangeFilter(1001, 1500)" class="range-btn px-3 py-1.5 rounded-lg bg-[#080f23] border border-gold-500/30 text-sand-300 hover:text-gold-300" data-range="1001-1500">1001 - 1500</button>
+          <button onclick="setRangeFilter(1501, 2000)" class="range-btn px-3 py-1.5 rounded-lg bg-[#080f23] border border-gold-500/30 text-sand-300 hover:text-gold-300" data-range="1501-2000">1501 - 2000</button>
+        </div>
+
+        <div class="flex items-center gap-2 w-full md:w-auto">
+          <input type="number" id="quickNumberSearch" min="1" max="2000" placeholder="Nº (ex: 777)"
+            class="px-3 py-1.5 rounded-lg bg-[#080f23] border border-gold-500/30 text-xs w-32 focus:ring-2 focus:ring-gold-500 focus:outline-none text-sand-100 font-mono">
+          <button onclick="searchExactTicket()" class="px-3.5 py-1.5 rounded-lg bg-gold-500 hover:bg-gold-400 text-slate-950 text-xs font-bold transition">
+            Buscar
+          </button>
+        </div>
+      </div>
+
+      <!-- GRID DE NÚMEROS -->
+      <div id="ticketsGrid" class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-2 p-4 sm:p-6 bg-[#101e35]/60 rounded-3xl border border-gold-500/25 min-h-[300px]">
+        <!-- Carregando via JS -->
+        <div class="col-span-full py-12 text-center text-sand-400">
+          <i data-lucide="loader" class="w-8 h-8 animate-spin mx-auto mb-2 text-gold-400"></i>
+          <span>Carregando pontos da rifa...</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER NOBRE -->
+  <footer class="bg-[#050a18] text-sand-400 py-12 border-t border-gold-500/20">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-6">
+      <div class="text-center sm:text-left">
+        <h4 class="text-gold-300 font-serif font-bold text-lg mb-1">Rifa Beneficente • Retiro Espiritual 2027</h4>
+        <p class="text-xs text-sand-500">Jornada à Terra Prometida • Ministério de Jovens & Família • Que Deus abençoe sua generosidade!</p>
+      </div>
+
+      <div class="flex items-center gap-4 text-xs font-semibold uppercase tracking-wider text-sand-400">
+        <a href="/vendedor" class="hover:text-gold-300 transition">Vendedor</a>
+        <span>•</span>
+        <a href="/lideres" class="hover:text-gold-300 transition">Líderes</a>
+        <span>•</span>
+        <a href="#apresentacao" class="hover:text-gold-300 transition">Topo</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- MODAL ACESSO CELULAR / QR CODE -->
+  <div id="mobileQrModal" class="fixed inset-0 z-50 bg-[#080f23]/80 backdrop-blur-md flex items-center justify-center p-4 hidden">
+    <div class="bg-[#101e35] rounded-3xl max-w-sm w-full p-6 text-center shadow-2xl relative border border-gold-500/40 gold-glow">
+      <button onclick="closeMobileQrModal()" class="absolute top-4 right-4 text-sand-400 hover:text-gold-300 font-bold text-lg">✕</button>
+      
+      <div class="w-12 h-12 rounded-2xl bg-gold-500 text-slate-950 flex items-center justify-center mx-auto mb-3 shadow-md shadow-gold-500/20">
+        <i data-lucide="smartphone" class="w-6 h-6"></i>
+      </div>
+      <h3 class="text-2xl font-serif font-black text-sand-100 mb-1">Acessar pelo Celular</h3>
+      <p class="text-xs text-sand-400 mb-4">Aponte a câmera do seu celular para abrir o site (conectado no mesmo Wi-Fi):</p>
+      
+      <div class="bg-white p-3 rounded-2xl border border-gold-500/40 inline-block mx-auto mb-4">
+        <img id="mobileQrImage" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=http://192.168.3.7:8000" alt="QR Code" class="w-48 h-48 mx-auto rounded-lg">
+      </div>
+
+      <div class="bg-[#080f23] p-2.5 rounded-xl text-xs font-mono text-gold-300 select-all mb-4 font-bold break-all border border-gold-500/30">
+        http://192.168.3.7:8000
+      </div>
+
+      <button onclick="closeMobileQrModal()" class="w-full py-2.5 bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-400 hover:to-gold-500 text-slate-950 rounded-xl text-xs font-bold uppercase tracking-wider transition">
+        Fechar
+      </button>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT DA PÁGINA INICIAL -->
+  <script>
+    let appConfig = {};
+    let currentRangeStart = 1;
+    let currentRangeEnd = 200;
+
+    function openMobileQrModal() {
+      document.getElementById('mobileQrModal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closeMobileQrModal() {
+      document.getElementById('mobileQrModal').classList.add('hidden');
+    }
+
+    async function loadConfigAndStats() {
+      try {
+        const [confRes, statRes] = await Promise.all([
+          fetch('/api/config'),
+          fetch('/api/stats')
+        ]);
+        appConfig = await confRes.json();
+        const stats = await statRes.json();
+
+        // Atualizar textos e dados da tela
+        if (appConfig.intro_text) {
+          document.getElementById('heroIntroText').innerHTML = appConfig.intro_text;
+        }
+        if (appConfig.about_text) {
+          document.getElementById('aboutTextContent').innerText = appConfig.about_text;
+        }
+        if (appConfig.bible_verse) {
+          document.getElementById('bibleVerseText').innerText = appConfig.bible_verse;
+        }
+        if (appConfig.pix_key) {
+          document.getElementById('displayPixKey').innerText = appConfig.pix_key;
+        }
+        if (appConfig.pix_beneficiary) {
+          document.getElementById('displayPixName').innerText = appConfig.pix_beneficiary;
+        }
+        if (appConfig.pix_bank) {
+          document.getElementById('displayPixBank').innerText = appConfig.pix_bank;
+        }
+
+        // Atualizar preço
+        const price = appConfig.price_per_ticket || "10.00";
+        document.querySelectorAll('.ticketPriceValue').forEach(el => el.innerText = parseFloat(price).toFixed(2).replace('.', ','));
+
+        // Atualizar métricas
+        document.getElementById('statPercentage').innerText = `${stats.percentage_paid}%`;
+        document.getElementById('progressBar').style.width = `${stats.percentage_paid}%`;
+        document.getElementById('statPaid').innerText = stats.paid_count;
+        document.getElementById('statReserved').innerText = stats.reserved_count;
+        document.getElementById('statAvailable').innerText = stats.available_count;
+
+        // Renderizar prêmios
+        renderPrizes(appConfig.prizes_list || []);
+
+      } catch (err) {
+        console.error("Erro ao carregar dados:", err);
+      }
+    }
+
+    function renderPrizes(prizes) {
+      const container = document.getElementById('prizesContainer');
+      if (!prizes.length) return;
+
+      const icons = ['trophy', 'award', 'gift', 'sparkles'];
+
+      container.innerHTML = prizes.map((p, idx) => `
+        <div class="bg-[#101e35] p-8 rounded-3xl border-2 ${idx === 0 ? 'border-gold-400 gold-glow' : 'border-gold-500/35'} shadow-2xl flex flex-col justify-between hover:-translate-y-1 transition duration-200 relative overflow-hidden">
+          <div class="absolute -right-10 -top-10 w-32 h-32 bg-gold-500/10 rounded-full blur-2xl"></div>
+          
+          <div>
+            <div class="flex items-center justify-between mb-5">
+              <span class="${idx === 0 ? 'bg-gradient-to-r from-gold-400 to-gold-600 text-slate-950' : 'bg-[#080f23] text-gold-300 border border-gold-500/40'} text-xs font-black px-3.5 py-1.5 rounded-full uppercase tracking-widest font-mono">
+                ${p.place}
+              </span>
+              <div class="w-10 h-10 rounded-xl bg-gold-500/15 border border-gold-500/30 flex items-center justify-center text-gold-400">
+                <i data-lucide="${icons[idx] || 'trophy'}" class="w-5 h-5"></i>
+              </div>
+            </div>
+
+            <span class="text-xs font-bold uppercase tracking-widest text-sand-400 block mb-1">Prêmio em Dinheiro</span>
+            <h3 class="font-serif font-black text-transparent bg-clip-text bg-gradient-to-r from-gold-200 via-gold-400 to-yellow-200 text-3xl sm:text-4xl mb-2">
+              ${p.title}
+            </h3>
+            <p class="text-xs sm:text-sm text-sand-300 leading-relaxed">${p.desc || ''}</p>
+          </div>
+
+          <div class="mt-8 pt-4 border-t border-gold-500/20 flex items-center justify-between text-xs text-sand-400">
+            <span class="flex items-center gap-1.5 font-medium text-emerald-400">
+              <i data-lucide="zap" class="w-3.5 h-3.5"></i>
+              <span>Transferência Imediata</span>
+            </span>
+            <span class="font-bold text-gold-300 font-mono">Retiro 2027</span>
+          </div>
+        </div>
+      `).join('');
+
+      lucide.createIcons();
+    }
+
+    async function loadTicketsRange(start, end) {
+      const grid = document.getElementById('ticketsGrid');
+      grid.innerHTML = `
+        <div class="col-span-full py-12 text-center text-sand-400">
+          <i data-lucide="loader" class="w-8 h-8 animate-spin mx-auto mb-2 text-gold-400"></i>
+          <span>Carregando números ${start} a ${end}...</span>
+        </div>
+      `;
+      lucide.createIcons();
+
+      try {
+        const res = await fetch(`/api/tickets?page_size=2000`);
+        const allTickets = await res.json();
+        
+        const filtered = allTickets.filter(t => t.number >= start && t.number <= end);
+        
+        grid.innerHTML = filtered.map(t => {
+          let bgClass = "bg-[#080f23]/80 text-sand-200 border-gold-500/30 hover:border-gold-400";
+          let label = "Livre";
+
+          if (t.status === 'reservado') {
+            bgClass = "bg-[#88652e]/40 text-gold-200 border-gold-400 hover:bg-[#88652e]/60";
+            label = "Reservado";
+          } else if (t.status === 'pago') {
+            bgClass = "bg-gradient-to-br from-gold-500 to-gold-600 text-slate-950 font-black border-gold-400 shadow-md shadow-gold-500/20";
+            label = "PAGO";
+          }
+
+          const padNum = String(t.number).padStart(4, '0');
+
+          return `
+            <div class="ticket-badge p-2.5 rounded-xl border text-center flex flex-col items-center justify-center cursor-default ${bgClass}" title="Ponto ${padNum} - Status: ${label}">
+              <span class="font-mono font-bold text-sm tracking-wider">${padNum}</span>
+              <span class="text-[9px] uppercase font-bold opacity-80 mt-0.5">${label}</span>
+            </div>
+          `;
+        }).join('');
+
+      } catch (err) {
+        grid.innerHTML = `<div class="col-span-full py-8 text-center text-red-400">Erro ao carregar números.</div>`;
+      }
+    }
+
+    function setRangeFilter(start, end) {
+      currentRangeStart = start;
+      currentRangeEnd = end;
+      document.querySelectorAll('.range-btn').forEach(btn => {
+        if (btn.getAttribute('data-range') === `${start}-${end}`) {
+          btn.className = "range-btn px-3 py-1.5 rounded-lg bg-gold-500 text-slate-950 font-bold";
+        } else {
+          btn.className = "range-btn px-3 py-1.5 rounded-lg bg-[#080f23] border border-gold-500/30 text-sand-300 hover:text-gold-300";
+        }
+      });
+      loadTicketsRange(start, end);
+    }
+
+    async function searchExactTicket() {
+      const numInput = document.getElementById('quickNumberSearch');
+      const val = parseInt(numInput.value);
+      if (!val || val < 1 || val > 2000) {
+        alert("Por favor, digite um número entre 1 e 2000.");
+        return;
+      }
+
+      const grid = document.getElementById('ticketsGrid');
+      grid.innerHTML = `
+        <div class="col-span-full py-8 text-center text-sand-400">
+          <i data-lucide="loader" class="w-6 h-6 animate-spin mx-auto mb-2 text-gold-400"></i>
+          <span>Buscando ponto ${val}...</span>
+        </div>
+      `;
+      lucide.createIcons();
+
+      try {
+        const res = await fetch(`/api/tickets?search=${val}`);
+        const tickets = await res.json();
+        if (!tickets.length) {
+          grid.innerHTML = `<div class="col-span-full py-8 text-center text-sand-400">Número não encontrado.</div>`;
+          return;
+        }
+
+        const t = tickets[0];
+        let bgClass = "bg-[#080f23] text-sand-100 border-gold-500/40";
+        let label = "Disponível para Compra";
+
+        if (t.status === 'reservado') {
+          bgClass = "bg-[#88652e]/50 text-gold-200 border-gold-400";
+          label = `Reservado por ${t.buyer_name || 'Comprador'}`;
+        } else if (t.status === 'pago') {
+          bgClass = "bg-gradient-to-r from-gold-500 to-gold-600 text-slate-950 font-black border-gold-400";
+          label = `Confirmado / Pago por ${t.buyer_name || 'Comprador'}`;
+        }
+
+        grid.innerHTML = `
+          <div class="col-span-full max-w-sm mx-auto p-6 rounded-3xl border text-center ${bgClass} shadow-xl my-4">
+            <span class="text-xs uppercase font-bold tracking-widest block opacity-75">Resultado da Busca</span>
+            <div class="font-mono text-5xl font-black my-3">${String(t.number).padStart(4, '0')}</div>
+            <div class="text-sm font-semibold mb-3">${label}</div>
+            <button onclick="setRangeFilter(1, 200)" class="text-xs underline font-bold mt-2 hover:text-gold-300">Voltar a ver todos os pontos</button>
+          </div>
+        `;
+      } catch (e) {
+        grid.innerHTML = `<div class="col-span-full py-8 text-center text-red-400">Erro na busca.</div>`;
+      }
+    }
+
+    async function handleBuyerSearch() {
+      const q = document.getElementById('buyerSearchInput').value.trim();
+      const resultsArea = document.getElementById('searchResultsArea');
+
+      if (!q || q.length < 2) {
+        alert("Por favor, digite pelo menos 2 caracteres do seu nome ou telefone.");
+        return;
+      }
+
+      resultsArea.classList.remove('hidden');
+      resultsArea.innerHTML = `
+        <div class="py-6 text-center text-sand-400">
+          <i data-lucide="loader" class="w-6 h-6 animate-spin mx-auto mb-2 text-gold-400"></i>
+          <span>Consultando seus bilhetes...</span>
+        </div>
+      `;
+      lucide.createIcons();
+
+      try {
+        const res = await fetch(`/api/buyer/search?q=${encodeURIComponent(q)}`);
+        const orders = await res.json();
+
+        if (!orders.length) {
+          resultsArea.innerHTML = `
+            <div class="p-6 rounded-2xl bg-[#080f23] border border-gold-500/20 text-center">
+              <i data-lucide="help-circle" class="w-8 h-8 mx-auto text-sand-500 mb-2"></i>
+              <h4 class="font-serif font-bold text-sand-100 text-lg">Nenhum ponto encontrado com "${q}"</h4>
+              <p class="text-xs text-sand-400 mt-1">Verifique se o nome ou telefone foi digitado corretamente conforme informado ao vendedor.</p>
+            </div>
+          `;
+          lucide.createIcons();
+          return;
+        }
+
+        resultsArea.innerHTML = `
+          <div class="space-y-4">
+            <div class="flex items-center justify-between border-b border-gold-500/20 pb-2">
+              <h4 class="font-serif font-bold text-sand-100 text-lg">Pedidos Encontrados (${orders.length})</h4>
+              <span class="text-xs text-sand-400">Comprador: <strong class="text-gold-300">${q}</strong></span>
+            </div>
+            ${orders.map(o => {
+              const isPaid = o.status === 'confirmado';
+              const badgeClass = isPaid ? 'bg-gold-500/20 text-gold-300 border-gold-500/40' : 'bg-sand-500/20 text-sand-300 border-sand-500/40';
+              const statusText = isPaid ? '✅ Pagamento Confirmado pelos Líderes' : '⏳ Aguardando Comprovação de Pagamento';
+
+              return `
+                <div class="p-4 rounded-2xl border ${isPaid ? 'border-gold-500/40 bg-[#080f23]' : 'border-gold-500/20 bg-[#080f23]/60'}">
+                  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+                    <div>
+                      <h5 class="font-bold text-sand-100 text-base">${o.buyer_name}</h5>
+                      <span class="text-xs text-sand-400">Vendido por: <strong class="text-gold-300">${o.seller_name}</strong></span>
+                    </div>
+                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold border ${badgeClass}">
+                      ${statusText}
+                    </span>
+                  </div>
+
+                  <div class="mb-2">
+                    <span class="text-xs font-bold text-sand-400 block mb-1">Seus Números da Sorte:</span>
+                    <div class="flex flex-wrap gap-1.5">
+                      ${o.ticket_list.map(n => `
+                        <span class="font-mono text-sm font-black px-2.5 py-1 rounded-lg ${isPaid ? 'bg-gradient-to-r from-gold-500 to-gold-600 text-slate-950' : 'bg-[#88652e] text-gold-100'} shadow-sm">
+                          ${String(n).padStart(4, '0')}
+                        </span>
+                      `).join('')}
+                    </div>
+                  </div>
+
+                  <div class="text-xs text-sand-400 pt-2 border-t border-gold-500/20 flex justify-between">
+                    <span>Total: <strong class="text-gold-300">R$ ${parseFloat(o.total_amount).toFixed(2).replace('.', ',')}</strong></span>
+                    <span>Data: ${new Date(o.created_at).toLocaleDateString('pt-BR')}</span>
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        `;
+        lucide.createIcons();
+
+      } catch (err) {
+        resultsArea.innerHTML = `<div class="p-4 text-center text-red-400 text-sm">Erro ao realizar a busca. Tente novamente.</div>`;
+      }
+    }
+
+    function copyPixKey() {
+      const key = document.getElementById('displayPixKey').innerText;
+      navigator.clipboard.writeText(key).then(() => {
+        const btn = document.getElementById('btnCopyText');
+        btn.innerText = "Copiado!";
+        setTimeout(() => {
+          btn.innerText = "Copiar";
+        }, 2500);
+      });
+    }
+
+    // Inicialização
+    document.addEventListener('DOMContentLoaded', () => {
+      loadConfigAndStats();
+      loadTicketsRange(1, 200);
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>

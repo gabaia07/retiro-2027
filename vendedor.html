@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Área do Vendedor - Retiro 2027 | Jornada à Terra Prometida</title>
+  
+  <!-- Fontes Oficiais: Cormorant Garamond, DM Sans e Space Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['"Cormorant Garamond"', 'serif'],
+            sans: ['"DM Sans"', '-apple-system', 'sans-serif'],
+            mono: ['"Space Mono"', 'monospace'],
+          },
+          colors: {
+            bgDark: '#080f23',
+            cardDark: '#101e35',
+            gold: {
+              300: '#dfc173',
+              400: '#d4a955',
+              500: '#c99f4b',
+              600: '#bd9650',
+              700: '#88652e',
+            },
+            sand: {
+              100: '#f4ede1',
+              200: '#eee3cd',
+              300: '#e6d8bb',
+              400: '#c6b99f',
+              500: '#8f98ab',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #080f23;
+      color: #eee3cd;
+      background-image: 
+        radial-gradient(circle at 30% 0%, rgba(47, 61, 104, 0.35), transparent 45%),
+        radial-gradient(circle at 85% 75%, rgba(88, 42, 100, 0.22), transparent 40%);
+      background-attachment: fixed;
+    }
+    .gold-glow {
+      box-shadow: 0 0 25px rgba(201, 159, 75, 0.15);
+    }
+  </style>
+</head>
+<body class="font-sans antialiased pb-16 min-h-screen">
+
+  <!-- TOPO -->
+  <header class="bg-[#101e35] text-white border-b border-gold-500/20 shadow-md">
+    <div class="max-w-3xl mx-auto px-4 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <a href="/" class="p-2 rounded-xl bg-[#080f23] hover:bg-gold-500 hover:text-slate-950 transition border border-gold-500/30 text-gold-400">
+          <i data-lucide="arrow-left" class="w-5 h-5"></i>
+        </a>
+        <div>
+          <h1 class="font-serif text-xl font-bold text-sand-100 leading-tight">Painel do Vendedor</h1>
+          <p class="text-xs text-gold-400 font-semibold tracking-wider">Jornada à Terra Prometida • Retiro 2027</p>
+        </div>
+      </div>
+      <a href="/" class="text-xs bg-[#080f23] text-gold-300 border border-gold-500/30 px-3.5 py-1.5 rounded-xl hover:bg-gold-500 hover:text-slate-950 transition font-bold uppercase tracking-wider">
+        Ver Rifa
+      </a>
+    </div>
+  </header>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <main class="max-w-2xl mx-auto px-4 mt-6">
+
+    <!-- CARD DO FORMULÁRIO DE VENDA -->
+    <div class="bg-[#101e35] rounded-3xl p-6 sm:p-8 shadow-2xl border border-gold-500/30 gold-glow">
+      
+      <!-- IDENTIFICAÇÃO DO VENDEDOR -->
+      <div class="mb-6 pb-6 border-b border-gold-500/20">
+        <label class="block text-xs font-bold uppercase tracking-wider text-gold-400 mb-2">
+          1. Seu Nome (Vendedor da Igreja) *
+        </label>
+        <div class="relative">
+          <i data-lucide="user" class="w-5 h-5 absolute left-3.5 top-3.5 text-sand-500"></i>
+          <input type="text" id="sellerName" placeholder="Ex: Gabriel Silva (Jovens)" 
+            class="w-full pl-11 pr-4 py-3 rounded-xl bg-[#080f23] border border-gold-500/30 focus:outline-none focus:ring-2 focus:ring-gold-500 text-sand-100 text-sm font-semibold placeholder:text-sand-500"
+            onchange="saveSellerName()">
+        </div>
+        <p class="text-[11px] text-sand-500 mt-1.5">Seu nome fica salvo neste aparelho para as próximas vendas.</p>
+      </div>
+
+      <!-- DADOS DO COMPRADOR -->
+      <div class="mb-6 pb-6 border-b border-gold-500/20 space-y-4">
+        <label class="block text-xs font-bold uppercase tracking-wider text-gold-400">
+          2. Dados de Quem Está Comprando *
+        </label>
+        
+        <div>
+          <label class="block text-xs font-medium text-sand-300 mb-1">Nome Completo do Comprador *</label>
+          <div class="relative">
+            <i data-lucide="user-check" class="w-5 h-5 absolute left-3.5 top-3.5 text-sand-500"></i>
+            <input type="text" id="buyerName" placeholder="Nome completo da pessoa" 
+              class="w-full pl-11 pr-4 py-3 rounded-xl bg-[#080f23] border border-gold-500/30 focus:outline-none focus:ring-2 focus:ring-gold-500 text-sand-100 text-sm placeholder:text-sand-500">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-sand-300 mb-1">WhatsApp / Telefone com DDD *</label>
+          <div class="relative">
+            <i data-lucide="phone" class="w-5 h-5 absolute left-3.5 top-3.5 text-sand-500"></i>
+            <input type="tel" id="buyerPhone" placeholder="(XX) 99999-9999" 
+              class="w-full pl-11 pr-4 py-3 rounded-xl bg-[#080f23] border border-gold-500/30 focus:outline-none focus:ring-2 focus:ring-gold-500 text-sand-100 text-sm placeholder:text-sand-500 font-mono">
+          </div>
+          <p class="text-[11px] text-sand-500 mt-1.5">Importante para enviar o comprovante de reserva!</p>
+        </div>
+      </div>
+
+      <!-- SELEÇÃO DE NÚMEROS -->
+      <div class="mb-6 pb-6 border-b border-gold-500/20">
+        <div class="flex items-center justify-between mb-3">
+          <label class="text-xs font-bold uppercase tracking-wider text-gold-400">
+            3. Escolha dos Números da Rifa *
+          </label>
+          <span class="text-xs text-slate-950 font-black bg-gradient-to-r from-gold-400 to-gold-500 px-2.5 py-0.5 rounded-lg font-mono">
+            R$ <span id="unitPriceDisplay">10,00</span> / ponto
+          </span>
+        </div>
+
+        <!-- BOTOES DE SURPRESINHA RÁPIDA -->
+        <div class="mb-4">
+          <span class="text-xs text-sand-400 font-semibold block mb-2">🎲 Escolha Rápida (Surpresinha):</span>
+          <div class="grid grid-cols-4 gap-2">
+            <button type="button" onclick="addRandomTickets(1)" class="py-2.5 px-2 bg-[#080f23] hover:bg-gold-500 hover:text-slate-950 text-gold-300 text-xs font-bold rounded-xl border border-gold-500/30 transition text-center font-mono">
+              +1 Ponto
+            </button>
+            <button type="button" onclick="addRandomTickets(3)" class="py-2.5 px-2 bg-[#080f23] hover:bg-gold-500 hover:text-slate-950 text-gold-300 text-xs font-bold rounded-xl border border-gold-500/30 transition text-center font-mono">
+              +3 Pontos
+            </button>
+            <button type="button" onclick="addRandomTickets(5)" class="py-2.5 px-2 bg-[#080f23] hover:bg-gold-500 hover:text-slate-950 text-gold-300 text-xs font-bold rounded-xl border border-gold-500/30 transition text-center font-mono">
+              +5 Pontos
+            </button>
+            <button type="button" onclick="addRandomTickets(10)" class="py-2.5 px-2 bg-[#080f23] hover:bg-gold-500 hover:text-slate-950 text-gold-300 text-xs font-bold rounded-xl border border-gold-500/30 transition text-center font-mono">
+              +10 Pontos
+            </button>
+          </div>
+        </div>
+
+        <!-- DIGITAR NÚMERO MANUAL -->
+        <div class="mb-4">
+          <label class="block text-xs text-sand-400 font-medium mb-1.5">Ou adicione um número específico (1 a 2000):</label>
+          <div class="flex gap-2">
+            <input type="number" id="manualTicketInput" min="1" max="2000" placeholder="Ex: 77" 
+              class="w-32 px-3 py-2 rounded-xl bg-[#080f23] border border-gold-500/30 text-sm focus:outline-none focus:ring-2 focus:ring-gold-500 text-sand-100 font-mono">
+            <button type="button" onclick="addManualTicket()" class="px-4 py-2 bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-400 hover:to-gold-500 text-slate-950 text-xs font-bold rounded-xl transition">
+              Adicionar
+            </button>
+            <button type="button" onclick="toggleNumberPicker()" class="ml-auto px-3 py-2 bg-[#080f23] hover:bg-[#152744] text-gold-300 text-xs font-medium rounded-xl border border-gold-500/30 transition flex items-center gap-1.5">
+              <i data-lucide="layout-grid" class="w-3.5 h-3.5"></i>
+              <span>Ver Grade</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- GRADE EXPANSÍVEL DE SELEÇÃO -->
+        <div id="numberPickerDrawer" class="hidden mb-4 p-4 bg-[#080f23] rounded-2xl border border-gold-500/30 max-h-60 overflow-y-auto">
+          <div class="flex justify-between items-center mb-3">
+            <span class="text-xs font-bold text-sand-300">Clique para selecionar pontos disponíveis:</span>
+            <button onclick="toggleNumberPicker()" class="text-xs text-sand-500 hover:text-gold-300 font-bold">Fechar ✕</button>
+          </div>
+          <div id="pickerGrid" class="grid grid-cols-5 sm:grid-cols-8 gap-1.5 text-xs">
+            <!-- Números carregados dinamicamente -->
+          </div>
+        </div>
+
+        <!-- NÚMEROS SELECIONADOS -->
+        <div class="mt-4 p-4 bg-[#080f23] rounded-2xl border border-gold-500/30">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-bold text-sand-300">Pontos Selecionados:</span>
+            <button type="button" onclick="clearSelectedTickets()" class="text-[11px] text-red-400 hover:text-red-300 font-semibold" id="btnClearAll" style="display: none;">
+              Limpar Todos
+            </button>
+          </div>
+
+          <div id="selectedBadgesContainer" class="flex flex-wrap gap-2 min-h-[36px] items-center">
+            <span class="text-xs text-sand-500 italic">Nenhum número selecionado ainda.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- RESUMO E BOTÃO DE REGISTRO -->
+      <div class="bg-[#080f23] p-5 rounded-2xl border border-gold-500/35 mb-6">
+        <div class="flex items-center justify-between text-sm mb-2">
+          <span class="text-sand-400">Total de Pontos:</span>
+          <strong class="text-sand-100 font-bold font-mono text-base" id="summaryQty">0 pontos</strong>
+        </div>
+        <div class="flex items-center justify-between text-base border-t border-gold-500/20 pt-2.5">
+          <span class="font-bold text-sand-300 font-serif text-lg">Valor Total a Pagar:</span>
+          <strong class="text-2xl font-black text-gold-300 font-mono" id="summaryTotal">R$ 0,00</strong>
+        </div>
+      </div>
+
+      <button type="button" id="btnSubmitOrder" onclick="submitReservation()" 
+        class="w-full py-4 rounded-2xl bg-gradient-to-r from-gold-500 via-gold-400 to-gold-500 hover:from-gold-400 hover:to-gold-300 text-slate-950 font-black text-base shadow-xl shadow-gold-500/25 transition transform hover:-translate-y-0.5 flex items-center justify-center gap-2 uppercase tracking-wider">
+        <i data-lucide="check-circle" class="w-5 h-5"></i>
+        <span>Registrar Reserva no Nome do Comprador</span>
+      </button>
+
+    </div>
+  </main>
+
+  <!-- MODAL DE SUCESSO & COMPARTILHAMENTO WHATSAPP -->
+  <div id="successModal" class="fixed inset-0 z-50 bg-[#080f23]/85 backdrop-blur-md flex items-center justify-center p-4 hidden">
+    <div class="bg-[#101e35] rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative border border-gold-500/40 gold-glow">
+      
+      <div class="w-16 h-16 rounded-full bg-gold-500/20 border border-gold-500/40 text-gold-300 flex items-center justify-center mx-auto mb-4">
+        <i data-lucide="check" class="w-8 h-8 stroke-[3]"></i>
+      </div>
+
+      <h3 class="text-2xl font-serif font-black text-center text-sand-100 mb-1">Reserva Registrada!</h3>
+      <p class="text-xs sm:text-sm text-center text-sand-400 mb-6">
+        Os números foram separados e aguardam a comprovação do Pix pelos líderes.
+      </p>
+
+      <!-- CARD RESUMO -->
+      <div class="bg-[#080f23] p-4 rounded-2xl border border-gold-500/30 mb-6 text-xs sm:text-sm space-y-2">
+        <div class="flex justify-between">
+          <span class="text-sand-400">Comprador:</span>
+          <strong class="text-sand-100" id="modalBuyerName">-</strong>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-sand-400">Vendedor:</span>
+          <strong class="text-sand-100" id="modalSellerName">-</strong>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-sand-400">Valor a Receber:</span>
+          <strong class="text-gold-300 font-bold font-mono text-base" id="modalTotalAmount">R$ 0,00</strong>
+        </div>
+        <div class="pt-2 border-t border-gold-500/20">
+          <span class="text-sand-400 block mb-1">Números Reservados:</span>
+          <div id="modalNumbersTags" class="flex flex-wrap gap-1.5">
+            <!-- Tags dos números -->
+          </div>
+        </div>
+      </div>
+
+      <!-- BOTÕES DE AÇÃO WHATSAPP -->
+      <div class="space-y-3">
+        <!-- 1. Enviar para o comprador -->
+        <a id="btnShareBuyerWhatsApp" target="_blank" 
+          class="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-500 hover:to-teal-600 text-white font-bold text-sm shadow flex items-center justify-center gap-2 transition">
+          <i data-lucide="message-circle" class="w-5 h-5"></i>
+          <span>1. Enviar Dados ao Comprador (WhatsApp)</span>
+        </a>
+
+        <!-- 2. Enviar comprovante para os líderes -->
+        <a id="btnShareLeaderWhatsApp" target="_blank"
+          class="w-full py-3.5 px-4 rounded-xl bg-[#080f23] hover:bg-[#152744] text-gold-300 border border-gold-500/40 font-bold text-sm shadow flex items-center justify-center gap-2 transition">
+          <i data-lucide="shield-check" class="w-5 h-5 text-gold-400"></i>
+          <span>2. Avisar Líderes para Dar Baixa (WhatsApp)</span>
+        </a>
+
+        <!-- Fechar e Nova Venda -->
+        <button type="button" onclick="resetSaleForm()" 
+          class="w-full py-3 px-4 rounded-xl bg-[#080f23]/60 hover:bg-[#080f23] text-sand-400 font-bold text-sm transition mt-2">
+          Fazer Outra Venda
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    let availableTickets = [];
+    let selectedTickets = new Set();
+    let pricePerTicket = 10.0;
+    let appConfig = {};
+
+    async function init() {
+      const savedSeller = localStorage.getItem('rifa_seller_name');
+      if (savedSeller) {
+        document.getElementById('sellerName').value = savedSeller;
+      }
+
+      try {
+        const [confRes, avRes] = await Promise.all([
+          fetch('/api/config'),
+          fetch('/api/available-numbers')
+        ]);
+        appConfig = await confRes.json();
+        availableTickets = await avRes.json();
+
+        if (appConfig.price_per_ticket) {
+          pricePerTicket = parseFloat(appConfig.price_per_ticket);
+          document.getElementById('unitPriceDisplay').innerText = pricePerTicket.toFixed(2).replace('.', ',');
+        }
+
+        renderPickerGrid();
+      } catch (e) {
+        console.error("Erro na inicialização:", e);
+      }
+
+      lucide.createIcons();
+    }
+
+    function saveSellerName() {
+      const name = document.getElementById('sellerName').value.trim();
+      if (name) {
+        localStorage.setItem('rifa_seller_name', name);
+      }
+    }
+
+    function toggleNumberPicker() {
+      const drawer = document.getElementById('numberPickerDrawer');
+      drawer.classList.toggle('hidden');
+    }
+
+    function renderPickerGrid() {
+      const grid = document.getElementById('pickerGrid');
+      const subset = availableTickets.slice(0, 300);
+      grid.innerHTML = subset.map(num => {
+        const isSelected = selectedTickets.has(num);
+        return `
+          <button type="button" onclick="toggleTicketSelection(${num})" 
+            class="p-1.5 rounded-lg border font-mono font-bold text-center transition ${isSelected ? 'bg-gradient-to-r from-gold-500 to-gold-600 text-slate-950 border-gold-400' : 'bg-[#101e35] hover:border-gold-400 text-sand-300 border-gold-500/30'}">
+            ${String(num).padStart(4, '0')}
+          </button>
+        `;
+      }).join('');
+    }
+
+    function toggleTicketSelection(num) {
+      if (selectedTickets.has(num)) {
+        selectedTickets.delete(num);
+      } else {
+        selectedTickets.add(num);
+      }
+      updateSelectedUI();
+      renderPickerGrid();
+    }
+
+    function addManualTicket() {
+      const input = document.getElementById('manualTicketInput');
+      const val = parseInt(input.value);
+      if (!val || val < 1 || val > 2000) {
+        alert("Digite um número válido entre 1 e 2000.");
+        return;
+      }
+
+      if (!availableTickets.includes(val)) {
+        alert(`O número ${String(val).padStart(4, '0')} já está reservado ou comprado por outra pessoa!`);
+        return;
+      }
+
+      selectedTickets.add(val);
+      input.value = '';
+      updateSelectedUI();
+      renderPickerGrid();
+    }
+
+    function addRandomTickets(count) {
+      const unselectedAvailable = availableTickets.filter(n => !selectedTickets.has(n));
+      if (unselectedAvailable.length < count) {
+        alert(`Apenas ${unselectedAvailable.length} pontos disponíveis restantes.`);
+        return;
+      }
+
+      const shuffled = [...unselectedAvailable].sort(() => 0.5 - Math.random());
+      const chosen = shuffled.slice(0, count);
+
+      chosen.forEach(n => selectedTickets.add(n));
+      updateSelectedUI();
+      renderPickerGrid();
+    }
+
+    function removeTicket(num) {
+      selectedTickets.delete(num);
+      updateSelectedUI();
+      renderPickerGrid();
+    }
+
+    function clearSelectedTickets() {
+      selectedTickets.clear();
+      updateSelectedUI();
+      renderPickerGrid();
+    }
+
+    function updateSelectedUI() {
+      const container = document.getElementById('selectedBadgesContainer');
+      const btnClear = document.getElementById('btnClearAll');
+      const summaryQty = document.getElementById('summaryQty');
+      const summaryTotal = document.getElementById('summaryTotal');
+
+      const arr = Array.from(selectedTickets).sort((a, b) => a - b);
+
+      if (arr.length === 0) {
+        container.innerHTML = `<span class="text-xs text-sand-500 italic">Nenhum número selecionado ainda.</span>`;
+        btnClear.style.display = 'none';
+        summaryQty.innerText = '0 pontos';
+        summaryTotal.innerText = 'R$ 0,00';
+        return;
+      }
+
+      btnClear.style.display = 'inline-block';
+      summaryQty.innerText = `${arr.length} ponto${arr.length > 1 ? 's' : ''}`;
+      const total = arr.length * pricePerTicket;
+      summaryTotal.innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
+
+      container.innerHTML = arr.map(n => `
+        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-gold-500/20 text-gold-300 border border-gold-500/40 font-mono text-xs font-bold shadow-sm">
+          ${String(n).padStart(4, '0')}
+          <button type="button" onclick="removeTicket(${n})" class="text-gold-400 hover:text-red-400 font-bold text-sm leading-none">✕</button>
+        </span>
+      `).join('');
+    }
+
+    async function submitReservation() {
+      const seller = document.getElementById('sellerName').value.trim();
+      const buyer = document.getElementById('buyerName').value.trim();
+      const phone = document.getElementById('buyerPhone').value.trim();
+      const numbers = Array.from(selectedTickets);
+
+      if (!seller) {
+        alert("Por favor, preencha o seu nome (Vendedor).");
+        document.getElementById('sellerName').focus();
+        return;
+      }
+      if (!buyer) {
+        alert("Por favor, preencha o nome do comprador.");
+        document.getElementById('buyerName').focus();
+        return;
+      }
+      if (!phone || phone.length < 8) {
+        alert("Por favor, preencha o WhatsApp do comprador.");
+        document.getElementById('buyerPhone').focus();
+        return;
+      }
+      if (numbers.length === 0) {
+        alert("Por favor, selecione ao menos 1 número para registrar a reserva.");
+        return;
+      }
+
+      saveSellerName();
+
+      const btnSubmit = document.getElementById('btnSubmitOrder');
+      btnSubmit.disabled = true;
+      btnSubmit.innerHTML = `<span>Registrando reserva...</span>`;
+
+      try {
+        const res = await fetch('/api/orders', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            buyer_name: buyer,
+            buyer_phone: phone,
+            seller_name: seller,
+            numbers: numbers
+          })
+        });
+
+        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(data.detail || "Erro ao registrar a reserva.");
+        }
+
+        availableTickets = availableTickets.filter(n => !numbers.includes(n));
+        showSuccessModal(data.order);
+
+      } catch (err) {
+        alert("Atenção: " + err.message);
+      } finally {
+        btnSubmit.disabled = false;
+        btnSubmit.innerHTML = `<i data-lucide="check-circle" class="w-5 h-5"></i><span>Registrar Reserva no Nome do Comprador</span>`;
+        lucide.createIcons();
+      }
+    }
+
+    function showSuccessModal(order) {
+      document.getElementById('modalBuyerName').innerText = order.buyer_name;
+      document.getElementById('modalSellerName').innerText = order.seller_name;
+      document.getElementById('modalTotalAmount').innerText = `R$ ${parseFloat(order.total_amount).toFixed(2).replace('.', ',')}`;
+
+      const tagsContainer = document.getElementById('modalNumbersTags');
+      tagsContainer.innerHTML = order.numbers.map(n => `
+        <span class="px-2 py-0.5 rounded-md bg-gradient-to-r from-gold-500 to-gold-600 text-slate-950 font-mono text-xs font-black">
+          ${String(n).padStart(4, '0')}
+        </span>
+      `).join('');
+
+      const formattedNums = order.numbers.map(n => String(n).padStart(4, '0')).join(', ');
+      const cleanPhone = order.buyer_phone.replace(/\D/g, '');
+      const pixKey = appConfig.pix_key || "retiro2027@igreja.org";
+      const pixBeneficiary = appConfig.pix_beneficiary || "Igreja / Retiro 2027";
+
+      const buyerMsg = encodeURIComponent(
+        `Olá, ${order.buyer_name}! 🙌\n\n` +
+        `Passando para confirmar que seus pontos da *Rifa do Retiro 2027 (Jornada à Terra Prometida)* foram reservados!\n\n` +
+        `🎟️ *Seus Números:* ${formattedNums}\n` +
+        `💰 *Valor Total:* R$ ${parseFloat(order.total_amount).toFixed(2).replace('.', ',')}\n\n` +
+        `🔑 *Chave Pix para Pagamento:*\n${pixKey}\n` +
+        `👤 *Titular:* ${pixBeneficiary}\n\n` +
+        `Assim que fizer o Pix, me envie o comprovante por aqui para que a liderança valide seus pontos no sistema oficial. Muito obrigado pelo seu apoio!`
+      );
+
+      const buyerBtn = document.getElementById('btnShareBuyerWhatsApp');
+      buyerBtn.href = `https://wa.me/55${cleanPhone}?text=${buyerMsg}`;
+
+      const leaderPhone = (appConfig.leader_whatsapp || "").replace(/\D/g, '');
+      const leaderMsg = encodeURIComponent(
+        `Olá Liderança! 📋\n\n` +
+        `Acabei de registrar uma venda de pontos da rifa do Retiro 2027:\n` +
+        `• *Comprador:* ${order.buyer_name}\n` +
+        `• *Vendedor:* ${order.seller_name}\n` +
+        `• *Números:* ${formattedNums}\n` +
+        `• *Total:* R$ ${parseFloat(order.total_amount).toFixed(2).replace('.', ',')}\n\n` +
+        `Estou encaminhando o comprovante para vocês darem baixa no painel dos líderes!`
+      );
+
+      const leaderBtn = document.getElementById('btnShareLeaderWhatsApp');
+      leaderBtn.href = leaderPhone ? `https://wa.me/${leaderPhone}?text=${leaderMsg}` : `https://api.whatsapp.com/send?text=${leaderMsg}`;
+
+      document.getElementById('successModal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function resetSaleForm() {
+      selectedTickets.clear();
+      document.getElementById('buyerName').value = '';
+      document.getElementById('buyerPhone').value = '';
+      updateSelectedUI();
+      renderPickerGrid();
+      document.getElementById('successModal').classList.add('hidden');
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
