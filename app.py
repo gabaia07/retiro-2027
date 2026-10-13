@@ -43,6 +43,7 @@ class ConfigUpdateRequest(BaseModel):
     prizes: Optional[str] = None
     intro_text: Optional[str] = None
     bible_verse: Optional[str] = None
+    google_sheet_url: Optional[str] = None
 
 # Middleware / Dependency de autenticação de líderes
 def verify_admin(authorization: Optional[str] = Header(None)):
@@ -169,6 +170,11 @@ def update_system_config(conf: ConfigUpdateRequest, auth: bool = Depends(verify_
         if v is not None:
             database.update_config(k, v)
     return {"success": True, "message": "Configurações atualizadas com sucesso!"}
+
+@app.post("/api/admin/sync-sheet")
+def sync_google_sheet(auth: bool = Depends(verify_admin)):
+    result = database.sync_from_google_sheet()
+    return result
 
 @app.get("/api/admin/export.csv")
 def export_tickets_csv(token: Optional[str] = None):

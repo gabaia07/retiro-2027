@@ -1,6 +1,8 @@
 import sqlite3
 import json
 import os
+import threading
+import requests
 from datetime import datetime
 
 DB_FILE = os.path.join(os.path.dirname(__file__), "rifa.db")
@@ -76,7 +78,8 @@ def init_db():
         ]),
         "intro_text": "Toda a arrecadação desta ação é 100% revertida para apoiar os participantes do nosso <strong>Retiro 2027</strong> através do <strong>Pix Premiado</strong>. Sua colaboração faz toda a diferença!",
         "about_text": "O retiro é um encontro especial planejado para proporcionar convivência, desenvolvimento pessoal, reflexão e novas experiências. Muitos participantes que não teriam condições individuais de arcar com os custos terão a oportunidade de viver essa jornada graças a você!",
-        "bible_verse": "A verdadeira solidariedade está em estender a mão e construir pontes para que mais pessoas realizem seus sonhos."
+        "bible_verse": "A verdadeira solidariedade está em estender a mão e construir pontes para que mais pessoas realizem seus sonhos.",
+        "google_sheet_url": ""
     }
 
     for key, val in default_configs.items():
@@ -91,6 +94,12 @@ def init_db():
 
     conn.commit()
     conn.close()
+
+    # Sincronizar dados da planilha caso configurado
+    try:
+        sync_from_google_sheet()
+    except Exception as e:
+        print(f"[Init Sync Warning] {e}")
 
 def get_config():
     conn = get_connection()
@@ -112,6 +121,97 @@ def update_config(key, value):
     cursor.execute("INSERT OR REPLACE INTO config (key, value) VALUES (?, ?)", (key, str(value)))
     conn.commit()
     conn.close()
+
+# --- INTEGRAÇÃO GOOGLE PLANILHAS (BACKUP & PERSISTÊNCIA) ---
+
+def get_sheet_url():
+    env_url = os.getenv("GOOGLE_SHEET_URL", "").strip()
+    if env_url:
+        return env_url
+    conf = get_config()
+    return conf.get("google_sheet_url", "").strip()
+
+def _post_sheet_async(payload):
+    url = get_sheet_url()
+    if not url:
+        return
+    try:
+        requests.post(url, json=payload, timeout=12)
+    except Exception as e:
+        print(f"[Google Sheets Sync Warning] {e}")
+
+def post_to_google_sheet(payload):
+    url = get_sheet_url()
+    if not url:
+        return
+    t = threading.Thread(target=_post_sheet_async, args=(payload,), daemon=True)
+    t.start()
+
+def sync_from_google_sheet():
+    url = get_sheet_url()
+    if not url:
+        return {"synced": False, "reason": "URL da planilha não configurada."}
+
+    try:
+        res = requests.get(url, timeout=15)
+        if res.status_code != 200:
+            return {"synced": False, "reason": f"Status HTTP {res.status_code} retornado pelo Google."}
+
+        data = res.json()
+        orders = []
+        if isinstance(data, dict):
+            orders = data.get("orders", [])
+        elif isinstance(data, list):
+            orders = data
+
+        if not orders:
+            return {"synced": True, "count": 0, "message": "Nenhum pedido registrado na planilha ainda."}
+
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        synced_count = 0
+        for item in orders:
+            order_id = item.get("order_id") or item.get("id")
+            buyer_name = item.get("buyer_name", "")
+            buyer_phone = str(item.get("buyer_phone", ""))
+            seller_name = item.get("seller_name", "")
+            status = (item.get("status") or "pendente").lower().strip()
+            numbers = item.get("numbers", [])
+            total_amount = float(item.get("total_amount") or 0)
+            notes = item.get("notes", "")
+            confirmed_by = item.get("confirmed_by", "")
+
+            if not order_id or not numbers:
+                continue
+
+            # Inserir ou atualizar na tabela de pedidos
+            cursor.execute("""
+            INSERT OR REPLACE INTO orders (id, buyer_name, buyer_phone, seller_name, total_tickets, total_amount, status, notes, confirmed_by)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, (order_id, buyer_name, buyer_phone, seller_name, len(numbers), total_amount, status, notes, confirmed_by))
+
+            # Atualizar status dos números (tickets)
+            ticket_status = 'pago' if status == 'confirmado' else ('reservado' if status == 'pendente' else 'disponivel')
+            order_ref = order_id if ticket_status != 'disponivel' else None
+
+            placeholders = ",".join("?" for _ in numbers)
+            cursor.execute(f"""
+            UPDATE tickets
+            SET status = ?, order_id = ?, updated_at = CURRENT_TIMESTAMP
+            WHERE number IN ({placeholders})
+            """, [ticket_status, order_ref] + numbers)
+
+            synced_count += 1
+
+        conn.commit()
+        conn.close()
+        print(f"[Google Sheets] Sincronização concluída: {synced_count} pedidos restaurados com sucesso!")
+        return {"synced": True, "count": synced_count, "message": f"{synced_count} pedidos sincronizados da planilha."}
+
+    except Exception as e:
+        print(f"[Google Sheets Sync Error] {e}")
+        return {"synced": False, "reason": str(e)}
 
 def get_stats():
     conn = get_connection()
@@ -230,6 +330,23 @@ def create_order(buyer_name, buyer_phone, seller_name, numbers, buyer_email="", 
         """, [order_id] + numbers)
 
         conn.commit()
+
+        # Enviar novo pedido para a planilha em background
+        post_to_google_sheet({
+            "action": "create_order",
+            "order_id": order_id,
+            "buyer_name": buyer_name.strip(),
+            "buyer_phone": buyer_phone.strip(),
+            "seller_name": seller_name.strip(),
+            "numbers": sorted(numbers),
+            "ticket_numbers": ", ".join(str(n).zfill(4) for n in sorted(numbers)),
+            "total_tickets": len(numbers),
+            "total_amount": total_amount,
+            "status": "pendente",
+            "notes": notes.strip(),
+            "created_at": datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+        })
+
         return {
             "order_id": order_id,
             "buyer_name": buyer_name,
@@ -268,6 +385,15 @@ def confirm_order(order_id, confirmed_by="Líder"):
         """, (order_id,))
 
         conn.commit()
+
+        # Atualizar status na planilha
+        post_to_google_sheet({
+            "action": "confirm_order",
+            "order_id": order_id,
+            "confirmed_by": confirmed_by,
+            "confirmed_at": datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+        })
+
         return True
     except Exception as e:
         conn.rollback()
@@ -297,6 +423,14 @@ def cancel_order(order_id, reason="Cancelado pelo líder"):
         """, (order_id,))
 
         conn.commit()
+
+        # Atualizar cancelamento na planilha
+        post_to_google_sheet({
+            "action": "cancel_order",
+            "order_id": order_id,
+            "reason": reason
+        })
+
         return True
     except Exception as e:
         conn.rollback()
