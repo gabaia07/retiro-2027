@@ -6,6 +6,7 @@ import requests
 from datetime import datetime
 
 DB_FILE = os.path.join(os.path.dirname(__file__), "rifa.db")
+DEFAULT_GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbwO0eYKJ9tQdM0lkAbBm6FfdrUfek-pkWptHuyxzqYWvGxDrSYfD0G2JoLg3uAWBxUH/exec"
 
 def get_connection():
     conn = sqlite3.connect(DB_FILE, check_same_thread=False)
@@ -79,11 +80,17 @@ def init_db():
         "intro_text": "Toda a arrecadação desta ação é 100% revertida para apoiar os participantes do nosso <strong>Retiro 2027</strong> através do <strong>Pix Premiado</strong>. Sua colaboração faz toda a diferença!",
         "about_text": "O retiro é um encontro especial planejado para proporcionar convivência, desenvolvimento pessoal, reflexão e novas experiências. Muitos participantes que não teriam condições individuais de arcar com os custos terão a oportunidade de viver essa jornada graças a você!",
         "bible_verse": "A verdadeira solidariedade está em estender a mão e construir pontes para que mais pessoas realizem seus sonhos.",
-        "google_sheet_url": ""
+        "google_sheet_url": DEFAULT_GOOGLE_SHEET_URL
     }
 
     for key, val in default_configs.items():
         cursor.execute("INSERT OR IGNORE INTO config (key, value) VALUES (?, ?)", (key, val))
+
+    # Garante que a URL da planilha nunca fique vazia mesmo se a tabela já existia
+    cursor.execute("SELECT value FROM config WHERE key = 'google_sheet_url'")
+    sheet_row = cursor.fetchone()
+    if not sheet_row or not sheet_row[0]:
+        cursor.execute("INSERT OR REPLACE INTO config (key, value) VALUES ('google_sheet_url', ?)", (DEFAULT_GOOGLE_SHEET_URL,))
 
     # Verificar se os 2000 números foram gerados
     cursor.execute("SELECT COUNT(*) FROM tickets")
@@ -108,6 +115,8 @@ def get_config():
     rows = cursor.fetchall()
     conn.close()
     config_dict = {row["key"]: row["value"] for row in rows}
+    if not config_dict.get("google_sheet_url"):
+        config_dict["google_sheet_url"] = DEFAULT_GOOGLE_SHEET_URL
     if "prizes" in config_dict:
         try:
             config_dict["prizes_list"] = json.loads(config_dict["prizes"])
@@ -129,7 +138,10 @@ def get_sheet_url():
     if env_url:
         return env_url
     conf = get_config()
-    return conf.get("google_sheet_url", "").strip()
+    sheet_url = conf.get("google_sheet_url", "").strip()
+    if sheet_url:
+        return sheet_url
+    return DEFAULT_GOOGLE_SHEET_URL
 
 def _post_sheet_async(payload):
     url = get_sheet_url()
