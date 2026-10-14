@@ -134,11 +134,15 @@ def get_sheet_url():
 def _post_sheet_async(payload):
     url = get_sheet_url()
     if not url:
+        print("[Google Sheets Warning] Nenhuma URL de planilha configurada.")
         return
     try:
-        requests.post(url, json=payload, timeout=12)
+        res = requests.post(url, json=payload, timeout=12)
+        print(f"[Google Sheets POST] Status: {res.status_code}, Resposta: {res.text[:120]}")
+        if "accounts.google.com" in res.url:
+            print("[Google Sheets ERRO CRÍTICO] O Google pediu login! A opção 'Quem tem acesso' precisa ser 'Qualquer pessoa'.")
     except Exception as e:
-        print(f"[Google Sheets Sync Warning] {e}")
+        print(f"[Google Sheets Sync Warning] Erro ao enviar para planilha: {e}")
 
 def post_to_google_sheet(payload):
     url = get_sheet_url()
@@ -146,6 +150,52 @@ def post_to_google_sheet(payload):
         return
     t = threading.Thread(target=_post_sheet_async, args=(payload,), daemon=True)
     t.start()
+
+def test_sheet_connection(test_url=None):
+    url = (test_url or get_sheet_url()).strip()
+    if not url:
+        return {"ok": False, "message": "Nenhuma URL informada."}
+
+    if "docs.google.com/spreadsheets" in url:
+        return {
+            "ok": False,
+            "message": "Atenção: Você colou o link da planilha no navegador! É necessário colar a URL do 'App da Web' gerada no Apps Script (ela começa com https://script.google.com/macros/s/... e termina com /exec)."
+        }
+
+    if "edit" in url or not url.endswith("/exec"):
+        return {
+            "ok": False,
+            "message": "Atenção: A URL deve ser a do Web App e terminar com '/exec'. Verifique se não copiou o link do editor do script."
+        }
+
+    try:
+        # Testa GET
+        res = requests.get(url, timeout=15)
+        if "accounts.google.com" in res.url or "Sign in - Google Accounts" in res.text:
+            return {
+                "ok": False,
+                "message": "Erro de Permissão no Google: O Google pediu login! No Apps Script, vá em 'Implantar' ➔ 'Gerenciar implantações' ➔ edite e garanta que 'Quem tem acesso' está como 'Qualquer pessoa' (Anyone)."
+            }
+
+        # Testa POST
+        post_res = requests.post(url, json={"action": "ping"}, timeout=15)
+        if "accounts.google.com" in post_res.url or "Sign in - Google Accounts" in post_res.text:
+            return {
+                "ok": False,
+                "message": "Erro de Permissão no Google (POST): O Google bloqueou o envio do pedido. Altere 'Quem tem acesso' para 'Qualquer pessoa'."
+            }
+
+        return {
+            "ok": True,
+            "message": "Conexão com o Google Planilhas funcionando 100%! O script respondeu corretamente.",
+            "status_code": post_res.status_code,
+            "response": post_res.text[:100]
+        }
+    except Exception as e:
+        return {
+            "ok": False,
+            "message": f"Erro de conexão com o Google: {str(e)}"
+        }
 
 def sync_from_google_sheet():
     url = get_sheet_url()

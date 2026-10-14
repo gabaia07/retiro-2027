@@ -176,6 +176,15 @@ def sync_google_sheet(auth: bool = Depends(verify_admin)):
     result = database.sync_from_google_sheet()
     return result
 
+class TestSheetRequest(BaseModel):
+    url: Optional[str] = None
+
+@app.post("/api/admin/test-sheet")
+def test_google_sheet(req: Optional[TestSheetRequest] = None, auth: bool = Depends(verify_admin)):
+    target_url = req.url if req and req.url else None
+    result = database.test_sheet_connection(target_url)
+    return result
+
 @app.get("/api/admin/export.csv")
 def export_tickets_csv(token: Optional[str] = None):
     # Permite autenticação por query param no download
